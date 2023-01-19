@@ -2,7 +2,6 @@ import React, { useReducer } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import DropZone from '../components/DropZone';
-import Image from 'next/image';
 
 const Home: NextPage = () => {
   // reducer function to handle state changes
@@ -10,17 +9,20 @@ const Home: NextPage = () => {
     switch (action.type) {
       case 'SET_IN_DROP_ZONE':
         return { ...state, inDropZone: action.inDropZone };
-      case 'ADD_FILE_TO_LIST':
-        return { ...state, fileList: state.fileList.concat(action.files) };
+      case 'ADD_ARCHITECTURE_FILE':
+        return { ...state, modelArchitectureFile: action.file };
+      case 'ADD_STATE_FILE':
+        return { ...state, modelStateFile: action.file };
       default:
         return state;
     }
   };
 
   // destructuring state and dispatch, initializing fileList to empty array
-  const [data, dispatch] = useReducer(reducer, {
+  const [state, dispatch] = useReducer(reducer, {
     inDropZone: false,
-    fileList: [],
+    modelStateFile: null,
+    modelArchitectureFile: null,
   });
 
   return (
@@ -39,39 +41,22 @@ const Home: NextPage = () => {
 
         <div className="my-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
           <a className="mt-6 w-96 rounded-xl border p-6 text-left">
-            <h3 className="text-2xl font-bold">Model State &rarr;</h3>
-            <p className="mt-4">
-              This file contains your trained model. It should be a
-              <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.pt</code> or{' '}
-              <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.pth</code> file.
-            </p>
-          </a>
-
-          <a className="mt-6 w-96 rounded-xl border p-6 text-left">
-            <h3 className="text-2xl font-bold">Model Architecture &rarr;</h3>
-            <p className="mt-4">
-              This file contains the architecture of your model. It should be a
-              <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.py</code> file.
-            </p>
-          </a>
-
-          <a className="mt-6 w-96 rounded-xl border p-6 text-left">
             <h3 className="text-2xl font-bold">Model State</h3>
             <p className="mt-4">
               This file contains your trained model. It should be a
               <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.pt</code> or{' '}
               <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.pth</code> file.
             </p>
-            <div className="border-2 border-dashed rounded-xl h-48 w-full mt-6 p-6 aspect-square flex flex-col justify-center items-center hover:bg-gray-100">
-              <Image src="/document.svg" alt="upload" height={50} width={50} />
-              <br />
-              Select File or Drag and Drop
-            </div>
+            <DropZone file={state.modelStateFile} fileAction="ADD_STATE_FILE" dispatch={dispatch} />
           </a>
-
-          {/* Pass state data and dispatch to the DropZone component */}
-          <DropZone data={data} dispatch={dispatch} />
-
+          <a className="mt-6 w-96 rounded-xl border p-6 text-left">
+            <h3 className="text-2xl font-bold">Model Architecture</h3>
+            <p className="mt-4">
+              This file contains the architecture of your model. It should be a
+              <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.py</code> file.
+            </p>
+            <DropZone file={state.modelArchitectureFile} fileAction="ADD_ARCHITECTURE_FILE" dispatch={dispatch} />
+          </a>
           <button
             className="transition ease-in-out delay-150 hover:translate-y-1 duration-300 bg-black text-white font-bold py-2 px-4 rounded-xl w-full m-8"
             onClick={() => alert('Button clicked!')}
