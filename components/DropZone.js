@@ -33,7 +33,7 @@ const DropZone = ({ file, fileAction, dispatch }) => {
     e.stopPropagation();
 
     // get file from event on the dataTransfer object
-    let file = e.dataTransfer.file;
+    let file = e.dataTransfer.files[0];
     // dispatch action to add droped file or files to fileList
     dispatch({ type: fileAction, file });
     // reset inDropZone to false
