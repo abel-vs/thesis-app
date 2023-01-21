@@ -1,78 +1,38 @@
+import React, { useCallback, useState } from 'react';
+import { useDropzone } from 'React-dropzone';
 import Image from 'next/image';
-import styles from '../styles/DropZone.module.css';
+import PropTypes from 'prop-types';
 
-const DropZone = ({ file, fileAction, dispatch }) => {
-  // onDragEnter sets inDropZone to true
-  const handleDragEnter = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: true });
-  };
+function Dropzone({ file, setFile }) {
+  const onDrop = useCallback((files) => {
+    console.log(files);
+    file = files[0];
+    setFile(file);
+    console.log(file);
+  }, []);
 
-  // onDragLeave sets inDropZone to false
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: false });
-  };
-
-  // onDragOver sets inDropZone to true
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    // set dropEffect to copy i.e copy of the source item
-    e.dataTransfer.dropEffect = 'copy';
-    dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: true });
-  };
-
-  // onDrop sets inDropZone to false and adds files to fileList
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    // get file from event on the dataTransfer object
-    let file = e.dataTransfer.files[0];
-    // dispatch action to add droped file or files to fileList
-    dispatch({ type: fileAction, file });
-    // reset inDropZone to false
-    dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: false });
-  };
-
-  // handle file selection via input element
-  const handleFileSelect = (e) => {
-    // get file from event on the dataTransfer object
-    let file = e.target.files[0];
-
-    // dispatch action to add droped file or files to fileList
-    dispatch({ type: fileAction, file });
-  };
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false });
 
   return (
-    <>
-      <input
-        id={'fileSelect' + fileAction}
-        type="file"
-        className={styles.files}
-        onChange={(e) => handleFileSelect(e)}
-      />
-      <div
-        className="border-2 border-dashed rounded-xl h-48 w-full mt-6 p-6 aspect-square flex flex-col justify-center items-center hover:bg-gray-100 cursor-pointer"
-        onDrop={(e) => handleDrop(e)}
-        onDragOver={(e) => handleDragOver(e)}
-        onDragEnter={(e) => handleDragEnter(e)}
-        onDragLeave={(e) => handleDragLeave(e)}
-        onClick={() => document.getElementById('fileSelect' + fileAction).click()}
-      >
-        {/* {fileAction} */}
-
-        <Image src="/document.svg" alt="upload" height={50} width={50} />
+    <div {...getRootProps({ className: 'dropzone' })}>
+      <input className="input-zone" {...getInputProps()} />
+      <div className="dropzone-content relative border-2 border-dashed rounded-xl h-48 w-full mt-6 p-6 aspect-square flex flex-col justify-center items-center hover:bg-gray-100 cursor-pointer">
+        <svg alt="upload" height={16} width={16} color="red" className="absolute top-4 right-4 fill-red-500">
+          {' '}
+          /cross.svg
+        </svg>
+        <Image src={file ? '/document.svg' : '/square-plus.svg'} alt="upload" height={50} width={50} />
         <br />
-        {file ? <code className="font-bold text-center">{file.name}</code> : 'Select File or Drag and Drop'}
+        {isDragActive ? (
+          "Drop it like it's hot!"
+        ) : file ? (
+          <code className="font-bold text-center">{file.name}</code>
+        ) : (
+          'Select File or Drag and Drop'
+        )}
       </div>
-    </>
+    </div>
   );
-};
+}
 
-export default DropZone;
+export default Dropzone;

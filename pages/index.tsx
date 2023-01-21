@@ -1,29 +1,11 @@
-import React, { useReducer } from 'react';
+import React, { useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import DropZone from '../components/DropZone';
 
 const Home: NextPage = () => {
-  // reducer function to handle state changes
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case 'SET_IN_DROP_ZONE':
-        return { ...state, inDropZone: action.inDropZone };
-      case 'ADD_ARCHITECTURE_FILE':
-        return { ...state, modelArchitectureFile: action.file };
-      case 'ADD_STATE_FILE':
-        return { ...state, modelStateFile: action.file };
-      default:
-        return state;
-    }
-  };
-
-  // destructuring state and dispatch, initializing fileList to empty array
-  const [state, dispatch] = useReducer(reducer, {
-    inDropZone: false,
-    modelStateFile: null,
-    modelArchitectureFile: null,
-  });
+  const [modelStateFile, setModelState] = useState(null);
+  const [modelArchitectureFile, setModelArchitecture] = useState(null);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
@@ -47,7 +29,7 @@ const Home: NextPage = () => {
               <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.pt</code> or{' '}
               <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.pth</code> file.
             </p>
-            <DropZone file={state.modelStateFile} fileAction="ADD_STATE_FILE" dispatch={dispatch} />
+            <DropZone file={modelStateFile} setFile={setModelState} />
           </a>
           <a className="mt-6 w-96 rounded-xl border p-6 text-left">
             <h3 className="text-2xl font-bold">Model Architecture</h3>
@@ -55,7 +37,7 @@ const Home: NextPage = () => {
               This file contains the architecture of your model. It should be a
               <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.py</code> file.
             </p>
-            <DropZone file={state.modelArchitectureFile} fileAction="ADD_ARCHITECTURE_FILE" dispatch={dispatch} />
+            <DropZone file={modelArchitectureFile} setFile={setModelArchitecture} />
           </a>
           <button
             className="transition ease-in-out delay-150 hover:translate-y-1 duration-300 bg-black text-white font-bold py-2 px-4 rounded-xl w-full m-8"
