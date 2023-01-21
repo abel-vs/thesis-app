@@ -29,7 +29,11 @@ const Home: NextPage = () => {
               <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.pt</code> or{' '}
               <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.pth</code> file.
             </p>
-            <DropZone file={modelStateFile} setFile={setModelState} />
+            <DropZone
+              file={modelStateFile}
+              setFile={setModelState}
+              acceptedTypes={{ 'text/x-python': ['.pt', '.pth'] }}
+            />
           </a>
           <a className="mt-6 w-96 rounded-xl border p-6 text-left">
             <h3 className="text-2xl font-bold">Model Architecture</h3>
@@ -37,7 +41,11 @@ const Home: NextPage = () => {
               This file contains the architecture of your model. It should be a
               <code className="rounded-md bg-gray-100 p-1 m-1 font-mono">.py</code> file.
             </p>
-            <DropZone file={modelArchitectureFile} setFile={setModelArchitecture} />
+            <DropZone
+              file={modelArchitectureFile}
+              setFile={setModelArchitecture}
+              acceptedTypes={{ 'text/x-python': ['.py'] }}
+            />
           </a>
           <button
             className="transition ease-in-out delay-150 hover:translate-y-1 duration-300 bg-black text-white font-bold py-2 px-4 rounded-xl w-full m-8"

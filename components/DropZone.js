@@ -3,15 +3,17 @@ import { useDropzone } from 'React-dropzone';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
 
-function Dropzone({ file, setFile }) {
-  const onDrop = useCallback((files) => {
-    console.log(files);
-    file = files[0];
-    setFile(file);
-    console.log(file);
+function Dropzone({ file, setFile, acceptedTypes }) {
+  const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
+    setFile(acceptedFiles[0]);
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    multiple: false,
+    maxFiles: 1,
+    accept: acceptedTypes,
+  });
 
   return (
     <div {...getRootProps({ className: 'dropzone' })}>
