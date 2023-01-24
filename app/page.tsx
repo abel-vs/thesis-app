@@ -1,18 +1,19 @@
+import '../styles/globals.css';
+
 import React, { useState } from 'react';
 import type { NextPage } from 'next';
-import Head from 'next/head';
-import DropZone from '../components/DropZone';
+import Head from './head';
 import Title from '../components/Title';
 import Link from 'next/link';
 import Button from '../components/Button';
 
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
+  const [modelStateFile, setModelState] = useState(null);
+  const [modelArchitectureFile, setModelArchitecture] = useState(null);
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
-      <Head>
-        <title>Thesis</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Head />
 
       <main className="flex w-full flex-1 flex-col items-center justify-center px-20 pt-10 text-center">
         <Title />
@@ -22,12 +23,8 @@ const Home: NextPage = () => {
           </Link>
         </div>
       </main>
-
-      <footer className="flex h-24 mt-6 w-full items-center justify-center border-t">
-        <a className="flex items-center justify-center gap-2">Thesis Project by Abel Van Steenweghen</a>
-      </footer>
     </div>
   );
 };
 
-export default Home;
+export default HomePage;
