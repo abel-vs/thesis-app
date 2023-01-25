@@ -11,12 +11,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <AppContext.Provider value={{ modelStateFile, setModelState, modelArchitectureFile, setModelArchitecture }}>
+      {/* <link rel="stylesheet" href="https://unpkg.com/flowbite@latest/dist/flowbite.min.css" /> */}
+
       <div className="flex min-h-screen flex-col items-center justify-center">
         <Head>
           <title>Thesis</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main className="flex w-full flex-1 flex-col items-center justify-center px-20 pt-10 text-center">
+        <main className="flex max-w-4xl sm:w-full flex-1 flex-col items-center justify-center px-20 pt-10 text-center">
           <Component {...pageProps} />
         </main>
         <Footer />

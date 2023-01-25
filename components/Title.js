@@ -1,12 +1,14 @@
-function Title() {
+import GradientText from './GradientText';
+
+function TitleBlock({ title, subtitle = '' }) {
   return (
     <>
-      <h1 className="text-6xl font-bold">
-        Tool <a className="bg-gradient-to-r from-cyan-500 to-green-500 text-transparent bg-clip-text">X</a>
+      <h1 className="text-5xl font-bold">
+        <GradientText text={title} />
       </h1>
-      <p className="mt-3 text-2xl">Automated model compression for deep learning.</p>
+      <p className="mt-3 text-2xl">{subtitle}</p>
     </>
   );
 }
 
-export default Title;
+export default TitleBlock;
