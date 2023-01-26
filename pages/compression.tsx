@@ -24,7 +24,7 @@ const CompressionPage: NextPage = () => {
             Pruning
           </h3>
           <p className="mt-4">
-            This file contains your trained model. It should be a <Code text=".pt" /> or <Code text=".pth" /> file.
+            Suggested method: <Code text="L1 Pruning" />
           </p>
         </a>
         <a className="mt-6 w-96 rounded-xl border p-6 text-left">
@@ -33,7 +33,7 @@ const CompressionPage: NextPage = () => {
             Quantization
           </h3>
           <p className="mt-4">
-            This file contains the architecture of your model. It should be a <Code text=".py" /> file.
+            Suggested quantiation: <Code text="INT-8" />
           </p>
         </a>
         <a className="mt-6 w-96 rounded-xl border p-6 text-left">
@@ -42,7 +42,7 @@ const CompressionPage: NextPage = () => {
             Distillation
           </h3>
           <p className="mt-4">
-            This file contains the architecture of your model. It should be a <Code text=".py" /> file.
+            Suggested method: <Code text="" />
           </p>
         </a>
 
