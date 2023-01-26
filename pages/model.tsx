@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import AppContext from '../context/AppContext';
 import Code from '../components/Code';
 import TitleBlock from '../components/Title';
+import { Card } from 'flowbite-react';
 
 const ModelPage: NextPage = () => {
   const context = useContext(AppContext);
@@ -14,9 +15,9 @@ const ModelPage: NextPage = () => {
     <>
       <TitleBlock title="Model" subtitle="Provide the model that you want optimize." />
       <div className="my-6 flex flex-wrap items-center justify-around">
-        <a className="mt-6 w-96 rounded-xl border p-6 text-left">
-          <h3 className="text-2xl font-bold">Model State</h3>
-          <p className="mt-4">
+        <Card className="w-96 text-left">
+          <h2 className="text-2xl font-bold">Model State</h2>
+          <p>
             This file contains your trained model. It should be a <Code text=".pt" /> or <Code text=".pth" /> file.
           </p>
           <DropZone
@@ -24,10 +25,10 @@ const ModelPage: NextPage = () => {
             setFile={context.setModelState}
             acceptedTypes={{ 'text/x-python': ['.pt', '.pth'] }}
           />
-        </a>
-        <a className="mt-6 w-96 rounded-xl border p-6 text-left">
+        </Card>
+        <Card className="w-96 text-left">
           <h3 className="text-2xl font-bold">Model Architecture</h3>
-          <p className="mt-4">
+          <p>
             This file contains the architecture of your model. It should be a <Code text=".py" /> file.
           </p>
           <DropZone
@@ -35,7 +36,7 @@ const ModelPage: NextPage = () => {
             setFile={context.setModelArchitecture}
             acceptedTypes={{ 'text/x-python': ['.py'] }}
           />
-        </a>
+        </Card>
 
         <div className="flex flex-row w-full m-8">
           <Link href="/" className="flex-none w-10 mr-2">

@@ -1,7 +1,7 @@
 import { Card, Radio } from 'flowbite-react';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import Button from '../components/Button';
 import Code from '../components/Code';
 import TitleBlock from '../components/Title';
@@ -23,8 +23,8 @@ const DataPage: NextPage = () => {
 
       <div className="w-full my-6">
         <Card className="text-left">
-          <h5 className="text-base font-semibold text-gray-900 dark:text-white text-3xl">Dataset</h5>
-          <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
+          <h2 className="text-2xl font-bold dark:text-white">Dataset</h2>
+          <p className="font-normal text-gray-600 dark:text-gray-400">
             Choose an existing dataset or provide a custom one.{' '}
           </p>
           <ul className="my-2 space-y-3">
@@ -33,7 +33,7 @@ const DataPage: NextPage = () => {
                 <a
                   onClick={() => {
                     document.getElementById(option.name)?.click();
-                    // context.setDataSet('customDataset');
+                    context.setDataset(option.name);
                   }}
                   className="group flex items-center rounded-lg bg-gray-50 p-3 text-base font-bold text-gray-900 hover:bg-gray-100 hover:shadow dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500"
                 >
@@ -67,7 +67,7 @@ const DataPage: NextPage = () => {
         </Link>
 
         <Link href="/goal" className="w-full">
-          <Button text="Next" />
+          <Button text="Next" disabled={context.dataset === null} />
         </Link>
       </div>
     </>

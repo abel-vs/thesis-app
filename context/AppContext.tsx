@@ -5,6 +5,8 @@ const AppContext = createContext({
   setModelState: null,
   modelArchitectureFile: null,
   setModelArchitecture: null,
+  dataset: null,
+  setDataset: null,
 });
 
 export default AppContext;
