@@ -13,7 +13,7 @@ const ModelPage: NextPage = () => {
   return (
     <>
       <TitleBlock title="Model" subtitle="Provide the model that you want optimize." />
-      <div className="my-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
+      <div className="my-6 flex flex-wrap items-center justify-around">
         <a className="mt-6 w-96 rounded-xl border p-6 text-left">
           <h3 className="text-2xl font-bold">Model State</h3>
           <p className="mt-4">
@@ -42,7 +42,7 @@ const ModelPage: NextPage = () => {
             <Button text="&larr;" />
           </Link>
 
-          <Link href="/configure" className="w-full">
+          <Link href="/data" className="w-full">
             <Button text="Next" disabled={context.modelStateFile === null || context.modelArchitectureFile === null} />
           </Link>
         </div>
