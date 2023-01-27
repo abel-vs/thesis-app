@@ -87,8 +87,6 @@ export default function Tabs() {
           Target compression: {compressionTarget}%
         </label>
         <Slider color="success" value={compressionTarget} onChange={(e) => setCompressionTarget(e.target.value)} />
-
-        {/* <RangeSlider className="text-green-500" value={target} /> */}
       </div>
     </div>
   );
