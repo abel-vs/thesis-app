@@ -29,7 +29,7 @@ function classNames(...classes) {
 
 export default function Tabs() {
   const [selected, setSelected] = useState(tabs[0]);
-  const [target, setTarget] = useState(95);
+  const [target, setTarget] = useState(50);
 
   return (
     <div>
@@ -88,7 +88,7 @@ export default function Tabs() {
           type="range"
           value={target}
           onChange={(e) => setTarget(e.target.value)}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-red-500"
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
         />
 
         {/* <RangeSlider className="text-green-500" value={target} /> */}
