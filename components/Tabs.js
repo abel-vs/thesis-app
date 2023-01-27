@@ -1,6 +1,6 @@
 import { CheckIcon, LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicons/react/solid';
-import { RangeSlider } from 'flowbite-react';
 import { useState } from 'react';
+import { Slider } from '@mui/joy';
 
 const tabs = [
   {
@@ -29,7 +29,7 @@ function classNames(...classes) {
 
 export default function Tabs() {
   const [selected, setSelected] = useState(tabs[0]);
-  const [target, setTarget] = useState(50);
+  const [compressionTarget, setCompressionTarget] = useState(50);
 
   return (
     <div>
@@ -83,13 +83,10 @@ export default function Tabs() {
       <div className="mt-4">
         {selected !== null ? selected.description : null}
 
-        <label className="block mt-4 font-bold text-gray-900 dark:text-white">Target compression: {target}%</label>
-        <input
-          type="range"
-          value={target}
-          onChange={(e) => setTarget(e.target.value)}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-        />
+        <label className="block mt-4 font-bold text-gray-900 dark:text-white">
+          Target compression: {compressionTarget}%
+        </label>
+        <Slider color="success" value={compressionTarget} onChange={(e) => setCompressionTarget(e.target.value)} />
 
         {/* <RangeSlider className="text-green-500" value={target} /> */}
       </div>

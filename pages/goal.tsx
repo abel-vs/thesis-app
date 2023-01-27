@@ -5,6 +5,8 @@ import { CheckIcon, LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicon
 import Link from 'next/link';
 import Button from '../components/Button';
 import Tabs from '../components/Tabs';
+import { RangeSlider, RangeSliderProps } from 'flowbite-react';
+import { Slider } from '@mui/joy';
 // import { Tabs } from 'flowbite-react';
 
 export default function Goal() {
@@ -26,12 +28,7 @@ export default function Goal() {
         <label className="block mt-4 font-bold text-gray-900 dark:text-white">
           Target performance: {performanceTarget}%
         </label>
-        <input
-          type="range"
-          value={performanceTarget}
-          onChange={(e) => setPerformanceTarget(e.target.value)}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-        />
+        <Slider color="success" value={performanceTarget} onChange={(e) => setPerformanceTarget(e.target.value)} />
       </div>
 
       <div className="flex flex-row w-full m-8">

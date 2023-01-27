@@ -4,6 +4,7 @@ import AppContext from '../context/AppContext';
 import { useState } from 'react';
 import Footer from '../components/Footer';
 import Head from 'next/head';
+import { Button, CssVarsProvider, Slider } from '@mui/joy';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [modelStateFile, setModelState] = useState(null);
@@ -22,7 +23,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main className="flex max-w-4xl sm:w-full flex-1 flex-col items-center justify-center text-center p-10">
-          <Component {...pageProps} />
+          <CssVarsProvider>
+            <Component {...pageProps} />
+          </CssVarsProvider>
         </main>
         <Footer />
       </div>
