@@ -1,11 +1,11 @@
-import { Tabs } from 'flowbite-react';
 import { useContext } from 'react';
-import Code from '../components/Code';
 import TitleBlock from '../components/Title';
 import AppContext from '../context/AppContext';
 import { CheckIcon, LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import Button from '../components/Button';
+import Tabs from '../components/Tabs';
+// import { Tabs } from 'flowbite-react';
 
 export default function Goal() {
   const context = useContext(AppContext);
@@ -16,9 +16,9 @@ export default function Goal() {
       <div className="w-full my-6 rounded-xl border p-6 text-left">
         <h3 className="text-2xl font-bold">Compression Goal</h3>
         <p className="my-4">Select the compression goal you want to achieve.</p>
-        <div className="bg-gray-100 rounded-xl">
-          <Tabs.Group aria-label="Data options" style="underline" className="w-full" color="succes">
-            <Tabs.Item title="Model Size" icon={DatabaseIcon}>
+        <Tabs />
+        {/* <Tabs.Group aria-label="Data options" style="underline" className="w-full" color="succes">
+            <Tabs.Item title="Model Size" icon={DatabaseIcon} className="">
               This goal aims to reduce the size of the model. It is achieved by reducing the number of parameters and
               the size of the parameters.
             </Tabs.Item>
@@ -30,8 +30,7 @@ export default function Goal() {
               This goal aims to reduce the energy consumption of the model. It is achieved by reducing the number of
               operations and optimizing the model for more energy-efficient hardware.
             </Tabs.Item>
-          </Tabs.Group>
-        </div>
+          </Tabs.Group> */}
       </div>
       <div className=" w-full rounded-xl border p-6 text-left">
         <h3 className="text-2xl font-bold">Performance Goal</h3>
