@@ -10,13 +10,30 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [modelStateFile, setModelState] = useState(null);
   const [modelArchitectureFile, setModelArchitecture] = useState(null);
   const [dataset, setDataset] = useState(null);
+  const [compressionType, setCompressionType] = useState('model_size');
+  const [compressionTarget, setCompressionTarget] = useState(50);
+  const [performanceTarget, setPerformanceTarget] = useState(95);
+  const [compressionActions, setCompressionActions] = useState([]);
 
   return (
     <AppContext.Provider
-      value={{ modelStateFile, setModelState, modelArchitectureFile, setModelArchitecture, dataset, setDataset }}
+      value={{
+        modelStateFile,
+        setModelState,
+        modelArchitectureFile,
+        setModelArchitecture,
+        dataset,
+        setDataset,
+        compressionType,
+        setCompressionType,
+        compressionTarget,
+        setCompressionTarget,
+        performanceTarget,
+        setPerformanceTarget,
+        compressionActions,
+        setCompressionActions,
+      }}
     >
-      {/* <link rel="stylesheet" href="https://unpkg.com/flowbite@latest/dist/flowbite.min.css" /> */}
-
       <div className="flex min-h-screen flex-col items-center justify-center">
         <Head>
           <title>Thesis</title>

@@ -1,6 +1,7 @@
 import { CheckIcon, LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicons/react/solid';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Slider } from '@mui/joy';
+import AppContext from '../context/AppContext';
 
 const tabs = [
   {
@@ -29,7 +30,7 @@ function classNames(...classes) {
 
 export default function Tabs() {
   const [selected, setSelected] = useState(tabs[0]);
-  const [compressionTarget, setCompressionTarget] = useState(50);
+  const context = useContext(AppContext);
 
   return (
     <div>
@@ -84,9 +85,13 @@ export default function Tabs() {
         {selected !== null ? selected.description : null}
 
         <label className="block mt-4 font-bold text-gray-900 dark:text-white">
-          Target compression: {compressionTarget}%
+          Target compression: {context.compressionTarget}%
         </label>
-        <Slider color="success" value={compressionTarget} onChange={(e) => setCompressionTarget(e.target.value)} />
+        <Slider
+          color="success"
+          value={context.compressionTarget}
+          onChange={(e) => context.setCompressionTarget(e.target.value)}
+        />
       </div>
     </div>
   );
