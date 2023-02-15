@@ -30,7 +30,7 @@ const DataPage: NextPage = () => {
           <ul className="my-2 space-y-3">
             {options.map((option) => (
               <li key={option.name}>
-                <a
+                <div
                   onClick={() => {
                     document.getElementById(option.name)?.click();
                     context.setDataset(option.name);
@@ -45,14 +45,14 @@ const DataPage: NextPage = () => {
                   />
                   <a className="ml-3 flex-1 whitespace-nowrap">{option.name}</a>
                   <Badge>{option.type}</Badge>
-                </a>
+                </div>
               </li>
             ))}
             <li key="custom">
-              <a className="group flex items-center rounded-lg bg-gray-50 p-3 text-base font-bold text-gray-900 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500">
+              <div className="group flex items-center rounded-lg bg-gray-50 p-3 text-base font-bold text-gray-900 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500">
                 <a className="ml-3 flex-1 whitespace-nowrap text-gray-400">Custom Dataset</a>
                 <Badge>Coming Soon</Badge>
-              </a>
+              </div>
             </li>
           </ul>
           <div>

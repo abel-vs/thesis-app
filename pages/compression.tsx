@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useRouter } from 'next/router';
+import router from 'next/router';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import Button from '../components/Button';
@@ -8,6 +8,7 @@ import Code from '../components/Code';
 import TitleBlock from '../components/Title';
 import { BeakerIcon, CheckCircleIcon, ChipIcon, ScissorsIcon, QuestionMarkCircleIcon } from '@heroicons/react/solid';
 import { Card } from 'flowbite-react';
+import { compressModel } from '../logic/api';
 
 const CompressionIcon = ({ type }) => {
   if (type === 'pruning') {
@@ -26,7 +27,7 @@ const SelectableCard = ({ children, className, onClick = () => {} }) => {
   return (
     <Card
       className={`${className} text-left relative outline outline-offset-0 outline-none rounded-md hover:bg-gray-100 ${
-        selected ? 'outline-4 outline-green-500' : ''
+        selected ? 'outline-4 outline-green-500 shadow-lg' : ''
       }`}
       onClick={() => {
         setSelected(!selected);
@@ -41,6 +42,13 @@ const SelectableCard = ({ children, className, onClick = () => {} }) => {
 
 const CompressionPage: NextPage = () => {
   const context = useContext(AppContext);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  if (context.compressionActions === undefined) {
+    router.push('/');
+    return;
+  }
 
   return (
     <>
@@ -69,9 +77,27 @@ const CompressionPage: NextPage = () => {
             <Button text="&larr;" />
           </Link>
 
-          <Link href="/results" className="w-full">
-            <Button text="Compress" />
-          </Link>
+          <Button
+            text="Compress"
+            loading={loading}
+            onClick={async () => {
+              setLoading(true);
+              const data = await compressModel(
+                context.modelStateFile,
+                context.modelArchitectureFile,
+                context.compressionActions
+              );
+              if (data === undefined) {
+                setLoading(false);
+                setErrorMessage('An error occured while compressing the model.');
+              } else {
+                context.setOriginalResults(data.original_results);
+                context.setCompressedResults(data.compressed_results);
+                setLoading(false);
+                router.push('/results');
+              }
+            }}
+          />
         </div>
       </div>
     </>

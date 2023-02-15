@@ -5,7 +5,7 @@ import { CheckIcon, LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicon
 import Link from 'next/link';
 import Button from '../components/Button';
 import Tabs from '../components/Tabs';
-import { RangeSlider, RangeSliderProps } from 'flowbite-react';
+import { RangeSlider, RangeSliderProps, Alert } from 'flowbite-react';
 import { Slider } from '@mui/joy';
 import { analyzeModel } from '../logic/api';
 import router from 'next/router';
@@ -14,6 +14,7 @@ import router from 'next/router';
 export default function Goal() {
   const context = useContext(AppContext);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   return (
     <>
@@ -50,18 +51,31 @@ export default function Goal() {
           loading={loading}
           onClick={async () => {
             setLoading(true);
-            const compression_actions = await analyzeModel(context.modelStateFile, context.modelArchitectureFile, {
+            const compression_actions: [] = await analyzeModel(context.modelStateFile, context.modelArchitectureFile, {
               compression_goal: 'test',
               compression_target: context.compressionTarget,
               performance_metric: 'accuracy',
               performance_target: context.performanceTarget,
             });
-            context.setCompressionActions(compression_actions);
-            setLoading(false);
-            router.push('/compression');
+            if (compression_actions === undefined) {
+              setLoading(false);
+              setErrorMessage('An error occured while analyzing the model.');
+            } else {
+              console.log(compression_actions);
+              context.setCompressionActions(compression_actions);
+              setLoading(false);
+              router.push('/compression');
+            }
           }}
         />
       </div>
+      {errorMessage && (
+        <>
+          <Alert color="failure" onDismiss={() => setErrorMessage(null)}>
+            {errorMessage}
+          </Alert>
+        </>
+      )}
     </>
   );
 }

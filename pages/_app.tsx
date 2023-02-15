@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Footer from '../components/Footer';
 import Head from 'next/head';
 import { Button, CssVarsProvider, Slider } from '@mui/joy';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [modelStateFile, setModelState] = useState(null);
@@ -14,6 +15,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [compressionTarget, setCompressionTarget] = useState(50);
   const [performanceTarget, setPerformanceTarget] = useState(95);
   const [compressionActions, setCompressionActions] = useState([]);
+  const [beforeMetrics, setBeforeMetrics] = useState([]);
+  const [afterMetrics, setAfterMetrics] = useState([]);
 
   return (
     <AppContext.Provider
@@ -32,6 +35,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         setPerformanceTarget,
         compressionActions,
         setCompressionActions,
+        originalResults: beforeMetrics,
+        setOriginalResults: setBeforeMetrics,
+        compressedResults: afterMetrics,
+        setCompressedResults: setAfterMetrics,
       }}
     >
       <div className="flex min-h-screen flex-col items-center justify-center">
@@ -39,12 +46,14 @@ function MyApp({ Component, pageProps }: AppProps) {
           <title>Thesis</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main className="flex max-w-4xl sm:w-full flex-1 flex-col items-center justify-center text-center p-10">
-          <CssVarsProvider>
+        <CssVarsProvider>
+          {/* <ErrorBoundary> */}
+          <main className="flex max-w-4xl sm:w-full flex-1 flex-col items-center justify-center text-center p-10">
             <Component {...pageProps} />
-          </CssVarsProvider>
-        </main>
-        <Footer />
+          </main>
+          <Footer />
+          {/* </ErrorBoundary> */}
+        </CssVarsProvider>
       </div>
     </AppContext.Provider>
   );

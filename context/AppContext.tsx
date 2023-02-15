@@ -1,20 +1,28 @@
 import { createContext } from 'react';
 
+const dispatchFunction = (value: any) => {
+  return;
+};
+
 const AppContext = createContext({
   modelStateFile: null,
-  setModelState: null,
+  setModelState: dispatchFunction,
   modelArchitectureFile: null,
-  setModelArchitecture: null,
+  setModelArchitecture: dispatchFunction,
   dataset: null,
-  setDataset: null,
+  setDataset: dispatchFunction,
   compressionType: null,
-  setCompressionType: null,
+  setCompressionType: dispatchFunction,
   compressionTarget: null,
-  setCompressionTarget: null,
+  setCompressionTarget: dispatchFunction,
   performanceTarget: null,
-  setPerformanceTarget: null,
+  setPerformanceTarget: dispatchFunction,
   compressionActions: null,
-  setCompressionActions: null,
+  setCompressionActions: dispatchFunction,
+  originalResults: {},
+  setOriginalResults: dispatchFunction,
+  compressedResults: {},
+  setCompressedResults: dispatchFunction,
 });
 
 export default AppContext;
