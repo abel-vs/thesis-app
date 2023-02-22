@@ -4,6 +4,15 @@ const dispatchFunction = (value: any) => {
   return;
 };
 
+type Results = {
+  score: number;
+  model_size: number;
+  params: number;
+  macs: number;
+  batch_duration: number;
+  data_duration: number;
+};
+
 const AppContext = createContext({
   modelStateFile: null,
   setModelState: dispatchFunction,
@@ -19,10 +28,12 @@ const AppContext = createContext({
   setPerformanceTarget: dispatchFunction,
   compressionActions: null,
   setCompressionActions: dispatchFunction,
-  originalResults: {},
+  originalResults: null,
   setOriginalResults: dispatchFunction,
-  compressedResults: {},
+  compressedResults: null,
   setCompressedResults: dispatchFunction,
+  compressedFile: null,
+  setCompressedFile: dispatchFunction,
 });
 
 export default AppContext;

@@ -40,8 +40,6 @@ const compressModel = async (model_state, model_architecture, compression_action
     });
     const data = await res.json();
     console.log('Data', data);
-    console.log('Original Metrics', data.original_metrics);
-    console.log('Compressed Metrics', data.compressed_metrics);
     return data;
   } catch (err) {
     console.error(err);

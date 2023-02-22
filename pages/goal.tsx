@@ -61,6 +61,9 @@ export default function Goal() {
               setLoading(false);
               setErrorMessage('An error occured while analyzing the model.');
             } else {
+              compression_actions.forEach((action) => {
+                action.selected = true;
+              });
               console.log(compression_actions);
               context.setCompressionActions(compression_actions);
               setLoading(false);

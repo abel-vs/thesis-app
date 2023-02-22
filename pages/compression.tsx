@@ -22,7 +22,7 @@ const CompressionIcon = ({ type }) => {
   }
 };
 
-const SelectableCard = ({ children, className, onClick = () => {} }) => {
+const SelectableCard = ({ children, className, onClick }) => {
   const [selected, setSelected] = useState(true);
   return (
     <Card
@@ -31,7 +31,7 @@ const SelectableCard = ({ children, className, onClick = () => {} }) => {
       }`}
       onClick={() => {
         setSelected(!selected);
-        onClick();
+        onClick(!selected);
       }}
     >
       {selected ? <CheckCircleIcon className="absolute top-3 right-3 w-8" color="green" /> : null}
@@ -61,7 +61,13 @@ const CompressionPage: NextPage = () => {
         {context.compressionActions === null
           ? 'No actions suggested'
           : context.compressionActions.map((action) => (
-              <SelectableCard className="w-80 m-6" key={action.name}>
+              <SelectableCard
+                className="w-80 m-6"
+                key={action.name}
+                onClick={(selected: boolean) => {
+                  action.selected = selected;
+                }}
+              >
                 <h3 className="text-2xl font-bold flex flex-row items-center capitalize">
                   <CompressionIcon type={action.type} />
                   {action.type}
@@ -85,7 +91,7 @@ const CompressionPage: NextPage = () => {
               const data = await compressModel(
                 context.modelStateFile,
                 context.modelArchitectureFile,
-                context.compressionActions
+                context.compressionActions.filter((action) => action.selected)
               );
               if (data === undefined) {
                 setLoading(false);
@@ -93,6 +99,7 @@ const CompressionPage: NextPage = () => {
               } else {
                 context.setOriginalResults(data.original_results);
                 context.setCompressedResults(data.compressed_results);
+                context.setCompressedFile(data.compressed_model);
                 setLoading(false);
                 router.push('/results');
               }

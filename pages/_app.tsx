@@ -15,8 +15,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [compressionTarget, setCompressionTarget] = useState(50);
   const [performanceTarget, setPerformanceTarget] = useState(95);
   const [compressionActions, setCompressionActions] = useState([]);
-  const [beforeMetrics, setBeforeMetrics] = useState([]);
-  const [afterMetrics, setAfterMetrics] = useState([]);
+  const [originalResults, setOriginalResults] = useState([]);
+  const [compressedResults, setCompressedResults] = useState([]);
+  const [compressedFile, setCompressedFile] = useState(null);
 
   return (
     <AppContext.Provider
@@ -35,10 +36,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         setPerformanceTarget,
         compressionActions,
         setCompressionActions,
-        originalResults: beforeMetrics,
-        setOriginalResults: setBeforeMetrics,
-        compressedResults: afterMetrics,
-        setCompressedResults: setAfterMetrics,
+        originalResults,
+        setOriginalResults,
+        compressedResults,
+        setCompressedResults,
+        compressedFile,
+        setCompressedFile,
       }}
     >
       <div className="flex min-h-screen flex-col items-center justify-center">
