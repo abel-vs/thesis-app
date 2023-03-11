@@ -4,6 +4,8 @@ import Button from '../components/Button';
 import TitleBlock from '../components/Title';
 import AppContext from '../context/AppContext';
 import { useContext } from 'react';
+import Link from 'next/link';
+import { saveAs } from 'file-saver';
 
 const TableTitle = ({ text }) => {
   return <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{text}</Table.Cell>;
@@ -15,7 +17,7 @@ const ResultsPage: NextPage = () => {
   const before = context.originalResults;
   const after = context.compressedResults;
 
-  const nf = Intl.NumberFormat();
+  const nf = Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 
   return (
     <>
@@ -80,9 +82,21 @@ const ResultsPage: NextPage = () => {
           </Table.Body>
         </Table>
       </div>
-      <div className="w-full">
-        <Button text="Download Files" />
+      <div className="w-full flex flex-row">
+        <Link href="/compression" className="flex-none w-10 mr-2">
+          <Button text="&larr;" />
+        </Link>
+
+        <Button
+          text="Download"
+          onClick={() => {
+            saveAs(context.compressedFile.name, 'compressed_model.pth');
+          }}
+        />
       </div>
+      {/* <a href={context.compressedFile.name} download>
+        Click to download
+      </a> */}
     </>
   );
 };

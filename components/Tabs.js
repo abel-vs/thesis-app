@@ -29,8 +29,8 @@ function classNames(...classes) {
 }
 
 export default function Tabs() {
-  const [selected, setSelected] = useState(tabs[0]);
   const context = useContext(AppContext);
+  const [selected, setSelected] = useState(tabs.find(x => x.name === context.compressionType));
 
   return (
     <div>
@@ -45,6 +45,10 @@ export default function Tabs() {
           name="tabs"
           className="block w-full focus:ring-green-500 focus:border-green-500 border-gray-300 rounded-md"
           defaultValue={selected.name}
+          onChange={(e) => {
+              context.setCompressionType(e.target.value);
+          }
+        }
         >
           {tabs.map((tab) => (
             <option key={tab.name}>{tab.name}</option>
@@ -53,7 +57,7 @@ export default function Tabs() {
       </div>
       {/* For large screens */}
       <div className="hidden sm:block ">
-        <nav className="flex space-x-4 bg-gray-100 rounded-lg" aria-label="Tabs">
+        <nav className="flex space-x-4 bg-gray-100 rounded-lg" aria-label="Tabs" onChange={(e)=> console.log(e)}>
           {tabs.map((tab) => (
             <a
               key={tab.name}
@@ -63,6 +67,7 @@ export default function Tabs() {
               )}
               aria-current={tab.index ? 'page' : undefined}
               onClick={() => {
+                context.setCompressionType(tab.name);
                 setSelected(tab);
               }}
             >
@@ -85,7 +90,7 @@ export default function Tabs() {
         {selected !== null ? selected.description : null}
 
         <label className="block mt-4 font-bold text-gray-900 dark:text-white">
-          Target compression: {context.compressionTarget}%
+          Target {context.compressionType.toLowerCase()}: {context.compressionTarget}%
         </label>
         <Slider
           color="success"

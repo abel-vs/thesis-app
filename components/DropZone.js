@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useDropzone } from 'React-dropzone';
+import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import { Alert } from 'flowbite-react';
 

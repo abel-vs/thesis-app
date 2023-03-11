@@ -7,6 +7,7 @@ import AppContext from '../context/AppContext';
 import Code from '../components/Code';
 import TitleBlock from '../components/Title';
 import { Card } from 'flowbite-react';
+import InfoLink from '../components/InfoLink';
 
 const ModelPage: NextPage = () => {
   const context = useContext(AppContext);
@@ -18,24 +19,26 @@ const ModelPage: NextPage = () => {
         <Card className="w-96 text-left">
           <h2 className="text-2xl font-bold">Model State</h2>
           <p>
-            This file contains your trained model. It should be a <Code text=".pt" /> or <Code text=".pth" /> file.
+            This file contains your trained model. It should be a <Code>.pt</Code> or <Code>.pth</Code> file.
           </p>
           <DropZone
             file={context.modelStateFile}
             setFile={context.setModelState}
             acceptedTypes={{ 'text/x-python': ['.pt', '.pth'] }}
           />
+          <InfoLink text="Why do I need a model state file?" info="Lorem Ipsum" />
         </Card>
         <Card className="w-96 text-left">
           <h3 className="text-2xl font-bold">Model Architecture</h3>
           <p>
-            This file contains the architecture of your model. It should be a <Code text=".py" /> file.
+            This file contains the architecture of your model. It should be a <Code>.py</Code> file.
           </p>
           <DropZone
             file={context.modelArchitectureFile}
             setFile={context.setModelArchitecture}
             acceptedTypes={{ 'text/x-python': ['.py'] }}
           />
+          <InfoLink text="Why do I need a model architecture file?" info="Lorem Ipsum" />
         </Card>
 
         <div className="flex flex-row w-full m-8">

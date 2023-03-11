@@ -10,13 +10,14 @@ import ErrorBoundary from '../components/ErrorBoundary';
 function MyApp({ Component, pageProps }: AppProps) {
   const [modelStateFile, setModelState] = useState(null);
   const [modelArchitectureFile, setModelArchitecture] = useState(null);
-  const [dataset, setDataset] = useState(null);
-  const [compressionType, setCompressionType] = useState('model_size');
+  const [dataset, setDataset] = useState("");
+  const [compressionType, setCompressionType] = useState('Model Size');
   const [compressionTarget, setCompressionTarget] = useState(50);
   const [performanceTarget, setPerformanceTarget] = useState(95);
   const [compressionActions, setCompressionActions] = useState([]);
-  const [beforeMetrics, setBeforeMetrics] = useState([]);
-  const [afterMetrics, setAfterMetrics] = useState([]);
+  const [originalResults, setOriginalResults] = useState([]);
+  const [compressedResults, setCompressedResults] = useState([]);
+  const [compressedFile, setCompressedFile] = useState(null);
 
   return (
     <AppContext.Provider
@@ -35,10 +36,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         setPerformanceTarget,
         compressionActions,
         setCompressionActions,
-        originalResults: beforeMetrics,
-        setOriginalResults: setBeforeMetrics,
-        compressedResults: afterMetrics,
-        setCompressedResults: setAfterMetrics,
+        originalResults,
+        setOriginalResults,
+        compressedResults,
+        setCompressedResults,
+        compressedFile,
+        setCompressedFile,
       }}
     >
       <div className="flex min-h-screen flex-col items-center justify-center">

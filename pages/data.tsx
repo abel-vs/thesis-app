@@ -7,15 +7,11 @@ import Code from '../components/Code';
 import TitleBlock from '../components/Title';
 import AppContext from '../context/AppContext';
 import Badge from '../components/Badge';
+import {datasets} from '../logic/datasets';
+import InfoLink from '../components/InfoLink';
 
 const DataPage: NextPage = () => {
   const context = useContext(AppContext);
-
-  const options = [
-    { name: 'MNIST', type: 'Image Classification' },
-    { name: 'GLUE', type: 'Text Classification' },
-    { name: 'WikiText', type: 'Text Generation' },
-  ];
 
   return (
     <>
@@ -28,7 +24,7 @@ const DataPage: NextPage = () => {
             Choose an existing dataset or provide a custom one.{' '}
           </p>
           <ul className="my-2 space-y-3">
-            {options.map((option) => (
+            {datasets.map((option) => (
               <li key={option.name}>
                 <div
                   onClick={() => {
@@ -55,14 +51,7 @@ const DataPage: NextPage = () => {
               </div>
             </li>
           </ul>
-          <div>
-            <a
-              href="#"
-              className="inline-flex items-center text-xs font-normal text-gray-500 hover:underline dark:text-gray-400"
-            >
-              Why do I need to select a dataset?
-            </a>
-          </div>
+          <InfoLink text="Why do I need to select a dataset?" info="The dataset is needed to evaluate performance and estimate the number of computations." />
         </Card>
       </div>
 

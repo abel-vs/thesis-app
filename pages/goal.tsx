@@ -9,6 +9,9 @@ import { RangeSlider, RangeSliderProps, Alert } from 'flowbite-react';
 import { Slider } from '@mui/joy';
 import { analyzeModel } from '../logic/api';
 import router from 'next/router';
+import CompressionPage from './compression';
+import { getPerformanceMetric } from '../logic/datasets';
+import Code from '../components/Code';
 // import { Tabs } from 'flowbite-react';
 
 export default function Goal() {
@@ -30,8 +33,12 @@ export default function Goal() {
           Choose the maximal performance decrease. The model won't be further compressed if this would decrease the
           performance below this threshold.
         </p>
+        <p>
+          The <b>{context.dataset}</b> dataset uses <b>{getPerformanceMetric(context.dataset)}</b> as performance metric.
+
+        </p>
         <label className="block mt-4 font-bold text-gray-900 dark:text-white">
-          Target performance: {context.performanceTarget}%
+          Target {getPerformanceMetric(context.dataset)}: {context.performanceTarget}%
         </label>
         <Slider
           color="success"
@@ -52,15 +59,18 @@ export default function Goal() {
           onClick={async () => {
             setLoading(true);
             const compression_actions: [] = await analyzeModel(context.modelStateFile, context.modelArchitectureFile, {
-              compression_goal: 'test',
+              compression_goal: context.compressionType,
               compression_target: context.compressionTarget,
-              performance_metric: 'accuracy',
+              performance_metric: getPerformanceMetric(context.dataset),
               performance_target: context.performanceTarget,
             });
             if (compression_actions === undefined) {
               setLoading(false);
               setErrorMessage('An error occured while analyzing the model.');
             } else {
+              compression_actions.forEach((action) => {
+                action.selected = true;
+              });
               console.log(compression_actions);
               context.setCompressionActions(compression_actions);
               setLoading(false);
