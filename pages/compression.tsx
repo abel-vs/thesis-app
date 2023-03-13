@@ -7,7 +7,7 @@ import AppContext from '../context/AppContext';
 import Code from '../components/Code';
 import TitleBlock from '../components/Title';
 import { BeakerIcon, CheckCircleIcon, ChipIcon, ScissorsIcon, QuestionMarkCircleIcon } from '@heroicons/react/solid';
-import { Card } from 'flowbite-react';
+import { Alert, Card } from 'flowbite-react';
 import { compressModel } from '../logic/api';
 import { getPerformanceMetric } from '../logic/datasets';
 
@@ -27,9 +27,8 @@ const SelectableCard = ({ children, className, onClick }) => {
   const [selected, setSelected] = useState(true);
   return (
     <Card
-      className={`${className} text-left relative outline outline-offset-0 outline-none rounded-md hover:bg-gray-100 ${
-        selected ? 'outline-4 outline-green-500 shadow-lg' : ''
-      }`}
+      className={`${className} text-left relative outline outline-offset-0 outline-none rounded-md hover:bg-gray-100 ${selected ? 'outline-4 outline-green-500 shadow-lg' : ''
+        }`}
       onClick={() => {
         setSelected(!selected);
         onClick(!selected);
@@ -62,22 +61,22 @@ const CompressionPage: NextPage = () => {
         {context.compressionActions === null
           ? 'No actions suggested'
           : context.compressionActions.map((action) => (
-              <SelectableCard
-                className="w-80 m-6"
-                key={action.name}
-                onClick={(selected: boolean) => {
-                  action.selected = selected;
-                }}
-              >
-                <h3 className="text-2xl font-bold flex flex-row items-center capitalize">
-                  <CompressionIcon type={action.type} />
-                  {action.type}
-                </h3>
-                <p className="mt-4">
-                  Suggested method: <Code text={action.name} />
-                </p>
-              </SelectableCard>
-            ))}
+            <SelectableCard
+              className="w-80 m-6"
+              key={action.name}
+              onClick={(selected: boolean) => {
+                action.selected = selected;
+              }}
+            >
+              <h3 className="text-2xl font-bold flex flex-row items-center capitalize">
+                <CompressionIcon type={action.type} />
+                {action.type}
+              </h3>
+              <p className="mt-4">
+                Suggested method: <Code text={action.name} />
+              </p>
+            </SelectableCard>
+          ))}
 
         <div className="flex flex-row w-full m-8">
           <Link href="/goal" className="flex-none w-10 mr-2">
@@ -89,14 +88,19 @@ const CompressionPage: NextPage = () => {
             loading={loading}
             onClick={async () => {
               setLoading(true);
-              const data = await compressModel(
+              const res = await compressModel(
                 context.modelStateFile,
                 context.modelArchitectureFile,
-                context.compressionActions.filter((action) => action.selected)
+                {
+                  actions: context.compressionActions.filter((action) => action.selected),
+                  dataset: context.dataset,
+                }
               );
-              if (data === undefined) {
+              if (!res.ok) {
                 setLoading(false);
-                setErrorMessage('An error occured while compressing the model.');
+                setErrorMessage('Error: ' + res.statusText);
+                console.log(res);
+                console.log(await res.json());
               } else {
                 context.setOriginalResults(data.original_results);
                 context.setCompressedResults(data.compressed_results);
@@ -107,6 +111,11 @@ const CompressionPage: NextPage = () => {
             }}
           />
         </div>
+        {errorMessage && (
+          <Alert color="failure" onDismiss={() => setErrorMessage(null)}>
+            {errorMessage}
+          </Alert>
+        )}
       </div>
     </>
   );

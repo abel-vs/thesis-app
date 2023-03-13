@@ -28,19 +28,18 @@ const analyzeModel = async (model_state, model_architecture, settings) => {
   }
 };
 
-const compressModel = async (model_state, model_architecture, compression_actions) => {
+const compressModel = async (model_state, model_architecture, settings) => {
   const form = new FormData();
   form.append('model_state', model_state);
   form.append('model_architecture', model_architecture);
-  form.append('compression_actions', '{"actions":' + JSON.stringify(compression_actions) + '}');
+  form.append('settings', JSON.stringify(settings));
+  console.log(form)
   try {
     const res = await fetch(url + '/compress', {
       method: 'POST',
       body: form,
     });
-    const data = await res.json();
-    console.log('Data', data);
-    return data;
+    return res;
   } catch (err) {
     console.error(err);
   }
