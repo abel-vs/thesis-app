@@ -51,7 +51,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </Head>
         <CssVarsProvider>
           {/* <ErrorBoundary> */}
-          <main className="flex max-w-4xl sm:w-full flex-1 flex-col items-center justify-center text-center p-10">
+          <main className="max-w-4xl sm:w-full text-center flex flex-col p-8">
             <Component {...pageProps} />
           </main>
           <Footer />

@@ -10,6 +10,24 @@ const callAPI = async () => {
   }
 };
 
+
+const evaluateModel = async (model_state, model_architecture, dataset) => {
+  const form = new FormData();
+  form.append('model_state', model_state);
+  form.append('model_architecture', model_architecture);
+  form.append('dataset', dataset);
+  try {
+    const res = await fetch(url + '/evaluate', {
+      method: 'POST',
+      body: form,
+    });
+    return res
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
 const analyzeModel = async (model_state, model_architecture, settings) => {
   const form = new FormData();
   form.append('model_state', model_state);
@@ -45,4 +63,4 @@ const compressModel = async (model_state, model_architecture, settings) => {
   }
 };
 
-export { callAPI, analyzeModel, compressModel };
+export { callAPI, evaluateModel, analyzeModel, compressModel };

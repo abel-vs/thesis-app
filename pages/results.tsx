@@ -34,9 +34,9 @@ const ResultsPage: NextPage = () => {
           <Table.Body className="divide-y">
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Accuracy" />
-              <Table.Cell>{(before.score * 100).toFixed(2)} %</Table.Cell>
-              <Table.Cell>{(after.score * 100).toFixed(2)} %</Table.Cell>
-              <Table.Cell>{((before.score - after.score) * 100).toFixed(2)} %</Table.Cell>
+              <Table.Cell>{(before.score).toFixed(2)} %</Table.Cell>
+              <Table.Cell>{(after.score).toFixed(2)} %</Table.Cell>
+              <Table.Cell>{(before.score - after.score).toFixed(2)} %</Table.Cell>
               <Table.Cell>{((1 - after.score / before.score) * 100).toFixed(2)} %</Table.Cell>
             </Table.Row>
 

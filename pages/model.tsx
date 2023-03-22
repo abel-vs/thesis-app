@@ -15,8 +15,8 @@ const ModelPage: NextPage = () => {
   return (
     <>
       <TitleBlock title="Model" subtitle="Provide the model that you want optimize." />
-      <div className="my-6 flex flex-wrap items-center justify-around">
-        <Card className="w-96 text-left">
+      <div className="my-8 flex flex-wrap items-center justify-around space-x-4">
+        <Card className="flex-1 text-left">
           <h2 className="text-2xl font-bold">Model State</h2>
           <p>
             This file contains your trained model. It should be a <Code>.pt</Code> or <Code>.pth</Code> file.
@@ -28,7 +28,7 @@ const ModelPage: NextPage = () => {
           />
           <InfoLink text="Why do I need a model state file?" info="Lorem Ipsum" />
         </Card>
-        <Card className="w-96 text-left">
+        <Card className="flex-1 text-left">
           <h3 className="text-2xl font-bold">Model Architecture</h3>
           <p>
             This file contains the architecture of your model. It should be a <Code>.py</Code> file.
@@ -40,8 +40,8 @@ const ModelPage: NextPage = () => {
           />
           <InfoLink text="Why do I need a model architecture file?" info="Lorem Ipsum" />
         </Card>
-
-        <div className="flex flex-row w-full m-8">
+      </div>
+      <div className="flex flex-row w-full">
           <Link href="/" className="flex-none w-10 mr-2">
             <Button text="&larr;" />
           </Link>
@@ -50,7 +50,6 @@ const ModelPage: NextPage = () => {
             <Button text="Next" disabled={context.modelStateFile === null || context.modelArchitectureFile === null} />
           </Link>
         </div>
-      </div>
     </>
   );
 };

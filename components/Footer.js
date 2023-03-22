@@ -1,6 +1,9 @@
 function Footer() {
+
+  //  Center the footer at the bottom of the page
+
   return (
-    <footer className="flex h-24 mt-6 w-full items-center justify-center border-t">
+    <footer className="absolute bottom-0 flex h-20 w-full items-center justify-center border-t">
       <a className="flex items-center justify-center gap-2">Thesis Project by Abel Van Steenweghen</a>
     </footer>
   );

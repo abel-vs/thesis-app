@@ -5,29 +5,79 @@ import { CheckIcon, LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicon
 import Link from 'next/link';
 import Button from '../components/Button';
 import Tabs from '../components/Tabs';
-import { RangeSlider, RangeSliderProps, Alert } from 'flowbite-react';
+import { RangeSlider, RangeSliderProps, Alert, Table, Card } from 'flowbite-react';
 import { Slider } from '@mui/joy';
 import { analyzeModel } from '../logic/api';
 import router from 'next/router';
 import CompressionPage from './compression';
 import { getPerformanceMetric } from '../logic/datasets';
 import Code from '../components/Code';
-// import { Tabs } from 'flowbite-react';
+
+const TableTitle = ({ text }) => {
+  return <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{text}</Table.Cell>;
+};
 
 export default function Goal() {
   const context = useContext(AppContext);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  const results = context.originalResults;
+  const nf = Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+
   return (
     <>
       <TitleBlock title="Goal" subtitle="Select a compression and performance goal." />
-      <div className="w-full my-6 rounded-xl border p-6 text-left">
+
+      <Card className="w-full mt-10 text-left">
+      <h3 className="text-2xl font-bold">Current Performance</h3>
+        <Table className="border-spacing-2">
+          <Table.Head>
+            <Table.HeadCell>Metric</Table.HeadCell>
+            <Table.HeadCell>Current</Table.HeadCell>
+            <Table.HeadCell>Goal</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+              <TableTitle text="Accuracy" />
+              <Table.Cell>{(results.score).toFixed(2)} %</Table.Cell>
+            </Table.Row>
+
+            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+              <TableTitle text="Model size" />
+              <Table.Cell>{results.model_size.toFixed(2)} MB</Table.Cell>
+            </Table.Row>
+            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+              <TableTitle text="Number of parameters" />
+              <Table.Cell>{nf.format(results.params)}</Table.Cell>
+            </Table.Row>
+
+            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+              <TableTitle text="Number of MACs" />
+              <Table.Cell>{nf.format(results.macs)}</Table.Cell>
+            </Table.Row>
+
+            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+              <TableTitle text="Inference time (per batch)" />
+              <Table.Cell>{results.batch_duration.toFixed(2)} ms</Table.Cell>
+            </Table.Row>
+
+            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+              <TableTitle text="Inference time (per data point)" />
+              <Table.Cell>{results.data_duration.toFixed(4)} ms</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+          </Table>
+      </Card>
+
+
+      <Card className="w-full my-6 text-left">
         <h3 className="text-2xl font-bold">Compression Goal</h3>
         <p className="my-4">Select the compression goal you want to achieve.</p>
         <Tabs />
-      </div>
-      <div className=" w-full rounded-xl border p-6 text-left">
+      </Card>
+
+      <Card className=" w-full text-left">
         <h3 className="text-2xl font-bold">Performance Threshold</h3>
         <p className="my-4">
           Choose the maximal performance decrease. The model won't be further compressed if this would decrease the
@@ -45,7 +95,7 @@ export default function Goal() {
           value={context.performanceTarget}
           onChange={(e) => context.setPerformanceTarget(e.target.value)}
         />
-      </div>
+      </Card>
 
       <div className="flex flex-row w-full m-8">
         <Link href="/data" className="flex-none w-10 mr-2">

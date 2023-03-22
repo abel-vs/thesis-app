@@ -2,6 +2,8 @@ import { CheckIcon, LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicon
 import { useState, useContext } from 'react';
 import { Slider } from '@mui/joy';
 import AppContext from '../context/AppContext';
+import ButtonGroup from './ButtonGroup';
+
 
 const tabs = [
   {
@@ -24,9 +26,6 @@ const tabs = [
   },
 ];
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 export default function Tabs() {
   const context = useContext(AppContext);
@@ -45,10 +44,8 @@ export default function Tabs() {
           name="tabs"
           className="block w-full focus:ring-green-500 focus:border-green-500 border-gray-300 rounded-md"
           defaultValue={selected.name}
-          onChange={(e) => {
-              context.setCompressionType(e.target.value);
+          onChange={(e) => context.setCompressionType(e.target.value)
           }
-        }
         >
           {tabs.map((tab) => (
             <option key={tab.name}>{tab.name}</option>
@@ -56,34 +53,12 @@ export default function Tabs() {
         </select>
       </div>
       {/* For large screens */}
+
       <div className="hidden sm:block ">
-        <nav className="flex space-x-4 bg-gray-100 rounded-lg" aria-label="Tabs" onChange={(e)=> console.log(e)}>
-          {tabs.map((tab) => (
-            <a
-              key={tab.name}
-              className={classNames(
-                tab === selected ? 'bg-green-100 text-green-700' : 'text-gray-500 hover:text-gray-700',
-                'px-3 py-2 font-medium text-sm rounded-lg flex-1 text-center'
-              )}
-              aria-current={tab.index ? 'page' : undefined}
-              onClick={() => {
-                context.setCompressionType(tab.name);
-                setSelected(tab);
-              }}
-            >
-              <div className="flex flex-row justify-center">
-                <div
-                  className={classNames(tab === selected ? 'text-green-500' : 'text-gray-500', 'w-5 h-5 mr-2 ')}
-                  aria-hidden="true"
-                >
-                  {tab.icon}
-                </div>
-                {/* {tab === selected && <CheckCircleIcon className="w-5 h-5 mr-2 text-green-500" aria-hidden="true" />} */}
-                {tab.name}
-              </div>
-            </a>
-          ))}
-        </nav>
+        <ButtonGroup
+          options={tabs}
+          defaultSelected={tabs[0]}
+          onTabChange={(tab) => context.setCompressionType(tab.name)} />
       </div>
       {/* Content */}
       <div className="mt-4">
