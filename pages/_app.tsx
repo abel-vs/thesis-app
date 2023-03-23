@@ -10,7 +10,7 @@ import ErrorBoundary from '../components/ErrorBoundary';
 function MyApp({ Component, pageProps }: AppProps) {
   const [modelStateFile, setModelState] = useState(null);
   const [modelArchitectureFile, setModelArchitecture] = useState(null);
-  const [dataset, setDataset] = useState("");
+  const [dataset, setDataset] = useState('');
   const [compressionType, setCompressionType] = useState('Model Size');
   const [compressionTarget, setCompressionTarget] = useState(50);
   const [performanceTarget, setPerformanceTarget] = useState(95);
@@ -44,20 +44,17 @@ function MyApp({ Component, pageProps }: AppProps) {
         setCompressedFile,
       }}
     >
-      <div className="flex min-h-screen flex-col items-center justify-center">
-        <Head>
-          <title>Thesis</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <CssVarsProvider>
-          {/* <ErrorBoundary> */}
-          <main className="max-w-4xl sm:w-full text-center flex flex-col p-8">
+      <Head>
+        <title>Thesis</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <CssVarsProvider>
+        {/* <ErrorBoundary> */}
+          <main className="mx-auto flex flex-col items-center justify-center max-w-4xl sm:w-full text-center min-h-screen p-8">
             <Component {...pageProps} />
           </main>
-          <Footer />
-          {/* </ErrorBoundary> */}
-        </CssVarsProvider>
-      </div>
+        {/* </ErrorBoundary> */}
+      </CssVarsProvider>
     </AppContext.Provider>
   );
 }

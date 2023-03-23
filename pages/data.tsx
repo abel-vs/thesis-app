@@ -1,4 +1,4 @@
-import { Alert, Card, FileInput, Label, Radio, Select, Tabs } from 'flowbite-react';
+import { Alert, Card, FileInput, Label, Radio, Select, Tabs, TextInput } from 'flowbite-react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useContext, useState } from 'react';
@@ -53,7 +53,7 @@ const DataPage: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const [taskCategory, setTaskCategory] = useState(null);
+  const [taskCategory, setTaskCategory] = useState('Computer Vision');
   const [taskType, setTaskType] = useState(null);
   const [lossFunction, setLossFunction] = useState(null);
   const [metric, setMetric] = useState(null);
@@ -85,7 +85,12 @@ const DataPage: NextPage = () => {
               ExistingData(context)
             ) : (
               <div id="customForm">
-                taskCategory: {taskCategory}
+                <div id="nameInput" className='my-3'>
+                  <div className="mb-2 block">
+                    <Label htmlFor="name" value="Name" />
+                  </div>
+                  <TextInput id="name" placeholder="My custom dataset" required={true} />
+                </div>
                 <div id="taskCategorySelect" className="my-3">
                   <div className="mb-2 block">
                     <Label htmlFor="taskCategory" value="Task Category" />
@@ -94,25 +99,28 @@ const DataPage: NextPage = () => {
                     id="taskCategory"
                     required={true}
                     value={taskCategory}
-                    onChange={(option) => console.log(option)}
+                    onChange={(event) => {
+                      console.log('Category Select changed:', event.target.value);
+                      setTaskCategory(event.target.value);
+                    }}
                   >
                     {TASK_CATEGORIES.map((category) => (
                       <option>{category}</option>
                     ))}
                   </Select>
                 </div>
-                {/* {taskCategory !== null && (
+                {taskCategory !== null && (
                   <div id="taskTypeSelect" className="my-3">
                     <div className="mb-2 block">
                       <Label htmlFor="taskType" value="Task Type" />
                     </div>
                     <Select id="taskType" required={true}>
-                      {TASK_TYPES[taskCategory].map(([key, value]) => (
-                        <option>{value.name}</option>
+                      {TASK_TYPES[taskCategory].map((key, value) => (
+                        <option>{key}</option>
                       ))}
                     </Select>
                   </div>
-                )} */}
+                )}
                 <div id="trainData" className="my-3">
                   <div className="mb-2 block">
                     <Label htmlFor="trainData" value="Train Data" />

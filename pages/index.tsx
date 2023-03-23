@@ -2,9 +2,11 @@ import type { NextPage } from 'next';
 import Button from '../components/Button';
 import Link from 'next/link';
 import GradientText from '../components/GradientText';
+import Footer from '../components/Footer';
 
 const Home: NextPage = () => {
   return (
+    <>
     <div className='flex flex-col items-center justify-center'>
       <h1 className="text-6xl font-bold">
         Tool <GradientText text="X" />
@@ -14,6 +16,8 @@ const Home: NextPage = () => {
         <Button text="Start" />
       </Link>
     </div>
+    <Footer/>
+    </>
   );
 };
 
