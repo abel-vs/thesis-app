@@ -41,30 +41,36 @@ export default function Goal() {
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Accuracy" />
               <Table.Cell>{(results.score).toFixed(2)} %</Table.Cell>
+              <Table.Cell>{(context.performanceTarget).toFixed(2)} %</Table.Cell>
             </Table.Row>
 
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Model size" />
               <Table.Cell>{results.model_size.toFixed(2)} MB</Table.Cell>
+              <Table.Cell>{ (context.compressionType ===  "Model Size") ? ((results.model_size * context.compressionTarget/100).toFixed(2) + " MB") : "-"}</Table.Cell>
             </Table.Row>
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Number of parameters" />
               <Table.Cell>{nf.format(results.params)}</Table.Cell>
+              <Table.Cell>{ (context.compressionType ===  "Model Size") ? nf.format(results.params * context.compressionTarget/100) : "-"}</Table.Cell>
             </Table.Row>
 
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Number of MACs" />
               <Table.Cell>{nf.format(results.macs)}</Table.Cell>
+              <Table.Cell>{ (context.compressionType ===  "Energy Usage") ? nf.format(results.macs * context.compressionTarget/100) : "-"}</Table.Cell>
             </Table.Row>
 
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Inference time (per batch)" />
               <Table.Cell>{results.batch_duration.toFixed(2)} ms</Table.Cell>
+              <Table.Cell>{ (context.compressionType ===  "Inference Time") ? ((results.batch_duration * context.compressionTarget/100).toFixed(2) + " ms") : "-"}</Table.Cell>
             </Table.Row>
 
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Inference time (per data point)" />
               <Table.Cell>{results.data_duration.toFixed(4)} ms</Table.Cell>
+              <Table.Cell>{ (context.compressionType ===  "Inference Time") ? ((results.data_duration * context.compressionTarget/100).toFixed(2) + " ms") : "-"}</Table.Cell>
             </Table.Row>
           </Table.Body>
           </Table>
@@ -93,6 +99,7 @@ export default function Goal() {
         <Slider
           color="success"
           value={context.performanceTarget}
+          max={results.score.toFixed(2)}
           onChange={(e) => context.setPerformanceTarget(e.target.value)}
         />
       </Card>

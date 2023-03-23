@@ -58,7 +58,7 @@ export default function Tabs() {
         <ButtonGroup
           options={tabs}
           defaultSelected={tabs[0]}
-          onTabChange={(tab) => context.setCompressionType(tab.name)} />
+          onChange={(tab) => context.setCompressionType(tab.name)} />
       </div>
       {/* Content */}
       <div className="mt-4">
