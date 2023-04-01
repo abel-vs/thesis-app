@@ -1,4 +1,4 @@
-import { Table } from 'flowbite-react';
+import { Card, Table } from 'flowbite-react';
 import { NextPage } from 'next';
 import Button from '../components/Button';
 import TitleBlock from '../components/Title';
@@ -6,6 +6,7 @@ import AppContext from '../context/AppContext';
 import { useContext } from 'react';
 import Link from 'next/link';
 import { saveAs } from 'file-saver';
+import Code from '../components/Code';
 
 const TableTitle = ({ text }) => {
   return <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{text}</Table.Cell>;
@@ -22,10 +23,26 @@ const ResultsPage: NextPage = () => {
   return (
     <>
       <TitleBlock title="Results" subtitle="Compression is complete." />
-      <div className="w-full my-10">
+      <Card className="w-full mt-10 mb-5 text-left">
+        <h2 className="text-2xl font-bold">Configuration</h2>
+        <div>
+          Compression goal was to reduce <b>{context.compressionType.toLowerCase()}</b> by{' '}
+          <b>{context.compressionTarget}%</b>.
+        </div>
+        <div>
+          Performance threshold was set at <b>{context.performanceTarget}%</b>.
+        </div>
+      </Card>
+      <Card className="w-full my-5 text-left">
+        <h2 className="text-2xl font-bold">New Architecture</h2>
+        <Code>{context.compressedArchitecture}</Code>
+      </Card>
+      <Card className="w-full my-5">
         <Table className="border-spacing-2">
           <Table.Head>
-            <Table.HeadCell></Table.HeadCell>
+            <Table.HeadCell className="font-black">
+              <h2 className="text-2xl font-bold text-left">Results</h2>
+            </Table.HeadCell>
             <Table.HeadCell>Original Model</Table.HeadCell>
             <Table.HeadCell>Compressed Model</Table.HeadCell>
             <Table.HeadCell>Absolute Reduction</Table.HeadCell>
@@ -34,8 +51,8 @@ const ResultsPage: NextPage = () => {
           <Table.Body className="divide-y">
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Accuracy" />
-              <Table.Cell>{(before.score).toFixed(2)} %</Table.Cell>
-              <Table.Cell>{(after.score).toFixed(2)} %</Table.Cell>
+              <Table.Cell>{before.score.toFixed(2)} %</Table.Cell>
+              <Table.Cell>{after.score.toFixed(2)} %</Table.Cell>
               <Table.Cell>{(before.score - after.score).toFixed(2)} %</Table.Cell>
               <Table.Cell>{((1 - after.score / before.score) * 100).toFixed(2)} %</Table.Cell>
             </Table.Row>
@@ -81,8 +98,8 @@ const ResultsPage: NextPage = () => {
             </Table.Row>
           </Table.Body>
         </Table>
-      </div>
-      <div className="w-full flex flex-row">
+      </Card>
+      <div className="w-full flex flex-row my-10">
         <Link href="/compression" className="flex-none w-10 mr-2">
           <Button text="&larr;" />
         </Link>

@@ -34,6 +34,8 @@ const AppContext = createContext({
   setCompressedResults: dispatchFunction,
   compressedFile: null,
   setCompressedFile: dispatchFunction,
+  compressedArchitecture: "",
+  setCompressedArchitecture: dispatchFunction,
 });
 
 export default AppContext;

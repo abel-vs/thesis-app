@@ -65,7 +65,7 @@ export default function Tabs() {
         {selected !== null ? selected.description : null}
 
         <label className="block mt-4 font-bold text-gray-900 dark:text-white">
-          Target {context.compressionType.toLowerCase()}: {context.compressionTarget}%
+          Target {context.compressionType.toLowerCase()} reduction: {context.compressionTarget}%
         </label>
         <Slider
           color="success"

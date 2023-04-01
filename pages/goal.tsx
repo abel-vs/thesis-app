@@ -30,7 +30,7 @@ export default function Goal() {
       <TitleBlock title="Goal" subtitle="Select a compression and performance goal." />
 
       <Card className="w-full mt-10 text-left">
-      <h3 className="text-2xl font-bold">Current Performance</h3>
+        <h3 className="text-2xl font-bold">Current Performance</h3>
         <Table className="border-spacing-2">
           <Table.Head>
             <Table.HeadCell>Metric</Table.HeadCell>
@@ -40,42 +40,61 @@ export default function Goal() {
           <Table.Body className="divide-y">
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Accuracy" />
-              <Table.Cell>{(results.score).toFixed(2)} %</Table.Cell>
-              <Table.Cell>{(context.performanceTarget).toFixed(2)} %</Table.Cell>
+              <Table.Cell>{results.score.toFixed(2)} %</Table.Cell>
+              <Table.Cell>{context.performanceTarget.toFixed(2)} %</Table.Cell>
             </Table.Row>
 
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Model size" />
               <Table.Cell>{results.model_size.toFixed(2)} MB</Table.Cell>
-              <Table.Cell>{ (context.compressionType ===  "Model Size") ? ((results.model_size * context.compressionTarget/100).toFixed(2) + " MB") : "-"}</Table.Cell>
+              <Table.Cell>
+                {context.compressionType === 'Model Size'
+                  ? (results.model_size * (1 - context.compressionTarget / 100)).toFixed(2) + ' MB'
+                  : '-'}
+              </Table.Cell>
             </Table.Row>
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Number of parameters" />
               <Table.Cell>{nf.format(results.params)}</Table.Cell>
-              <Table.Cell>{ (context.compressionType ===  "Model Size") ? nf.format(results.params * context.compressionTarget/100) : "-"}</Table.Cell>
+              <Table.Cell>
+                {context.compressionType === 'Model Size'
+                  ? nf.format(results.params * (1 - context.compressionTarget / 100))
+                  : '-'}
+              </Table.Cell>
             </Table.Row>
 
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Number of MACs" />
               <Table.Cell>{nf.format(results.macs)}</Table.Cell>
-              <Table.Cell>{ (context.compressionType ===  "Energy Usage") ? nf.format(results.macs * context.compressionTarget/100) : "-"}</Table.Cell>
+              <Table.Cell>
+                {context.compressionType === 'Energy Usage'
+                  ? nf.format(results.macs * (1 - context.compressionTarget / 100))
+                  : '-'}
+              </Table.Cell>
             </Table.Row>
 
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Inference time (per batch)" />
               <Table.Cell>{results.batch_duration.toFixed(2)} ms</Table.Cell>
-              <Table.Cell>{ (context.compressionType ===  "Inference Time") ? ((results.batch_duration * context.compressionTarget/100).toFixed(2) + " ms") : "-"}</Table.Cell>
+              <Table.Cell>
+                {context.compressionType === 'Inference Time'
+                  ? (results.batch_duration * (1 - context.compressionTarget / 100)).toFixed(2) + ' ms'
+                  : '-'}
+              </Table.Cell>
             </Table.Row>
 
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <TableTitle text="Inference time (per data point)" />
               <Table.Cell>{results.data_duration.toFixed(4)} ms</Table.Cell>
-              <Table.Cell>{ (context.compressionType ===  "Inference Time") ? ((results.data_duration * context.compressionTarget/100).toFixed(2) + " ms") : "-"}</Table.Cell>
+              <Table.Cell>
+                {context.compressionType === 'Inference Time'
+                  ? (results.data_duration * (1 - context.compressionTarget / 100)).toFixed(2) + ' ms'
+                  : '-'}
+              </Table.Cell>
             </Table.Row>
           </Table.Body>
-          </Table>
+        </Table>
       </Card>
-
 
       <Card className="w-full my-6 text-left">
         <h3 className="text-2xl font-bold">Compression Goal</h3>
@@ -90,11 +109,11 @@ export default function Goal() {
           performance below this threshold.
         </p>
         <p>
-          The <b>{context.dataset}</b> dataset uses <b>{getPerformanceMetric(context.dataset)}</b> as performance metric.
-
+          The <b>{context.dataset}</b> dataset uses <b>{getPerformanceMetric(context.dataset)}</b> as performance
+          metric.
         </p>
         <label className="block mt-4 font-bold text-gray-900 dark:text-white">
-          Target {getPerformanceMetric(context.dataset)}: {context.performanceTarget}%
+          {getPerformanceMetric(context.dataset)} threshold : {context.performanceTarget}%
         </label>
         <Slider
           color="success"

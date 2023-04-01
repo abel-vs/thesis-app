@@ -18,6 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [originalResults, setOriginalResults] = useState([]);
   const [compressedResults, setCompressedResults] = useState([]);
   const [compressedFile, setCompressedFile] = useState(null);
+  const [compressedArchitecture, setCompressedArchitecture] = useState("");
 
   return (
     <AppContext.Provider
@@ -42,6 +43,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         setCompressedResults,
         compressedFile,
         setCompressedFile,
+        compressedArchitecture,
+        setCompressedArchitecture
       }}
     >
       <Head>
