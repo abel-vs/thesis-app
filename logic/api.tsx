@@ -10,7 +10,6 @@ const callAPI = async () => {
   }
 };
 
-
 const evaluateModel = async (model_state, model_architecture, dataset) => {
   const form = new FormData();
   form.append('model_state', model_state);
@@ -21,12 +20,11 @@ const evaluateModel = async (model_state, model_architecture, dataset) => {
       method: 'POST',
       body: form,
     });
-    return res
+    return res;
   } catch (err) {
     console.error(err);
   }
 };
-
 
 const analyzeModel = async (model_state, model_architecture, settings) => {
   const form = new FormData();
@@ -51,7 +49,7 @@ const compressModel = async (model_state, model_architecture, settings) => {
   form.append('model_state', model_state);
   form.append('model_architecture', model_architecture);
   form.append('settings', JSON.stringify(settings));
-  console.log(form)
+  console.log(form);
   try {
     const res = await fetch(url + '/compress', {
       method: 'POST',
@@ -63,4 +61,19 @@ const compressModel = async (model_state, model_architecture, settings) => {
   }
 };
 
-export { callAPI, evaluateModel, analyzeModel, compressModel };
+const getClasses = async (file) => {
+  const form = new FormData();
+  form.append('file', file);
+  try {
+    const res = await fetch(url + '/get-classes', {
+      method: 'POST',
+      body: form,
+    });
+    const classes = await res.json();
+    return classes;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export { callAPI, evaluateModel, analyzeModel, compressModel, getClasses };
