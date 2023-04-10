@@ -3,25 +3,17 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useContext, useState } from 'react';
 import Button from '../components/Button';
-import Code from '../components/Code';
 import TitleBlock from '../components/Title';
-import AppContext from '../context/AppContext';
+import { AppState, AppContext } from '../context/AppContext';
 import Badge from '../components/Badge';
 import { DATASETS, LOSS_FUNCTIONS, TASK_CATEGORIES, PERFORMANCE_METRICS, TASK_TYPES } from '../logic/datasets';
 import InfoLink from '../components/InfoLink';
 import router from 'next/router';
 import { evaluateModel } from '../logic/api';
-// import { Button } from 'flowbite-react';
+import { ButtonOption } from '../components/ButtonGroup';
 import ButtonGroup from '../components/ButtonGroup';
 
-// const [taskCategory, setTaskCategory] = useState(null);
-// const [taskType, setTaskType] = useState(null);
-// const [lossFunction, setLossFunction] = useState(null);
-// const [metric, setMetric] = useState(null);
-// const [trainData, setTrainData] = useState(null);
-// const [testData, setTestData] = useState(null);
-
-const ExistingData = (context: typeof AppContext) => {
+const DataSetSelector = (context: AppState) => {
   return (
     <ul className="my-2 space-y-3">
       {DATASETS.map((option) => (
@@ -29,16 +21,11 @@ const ExistingData = (context: typeof AppContext) => {
           <div
             onClick={() => {
               document.getElementById(option.name)?.click();
-              context.setDataset(option.name);
+              context.setDataset(option);
             }}
             className="group flex items-center rounded-lg bg-gray-50 p-3 text-base font-bold text-gray-900 hover:bg-gray-100 hover:shadow dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500"
           >
-            <Radio
-              id={option.name}
-              name="dataset"
-              value={option.name}
-              defaultChecked={context.dataset === option.name}
-            />
+            <Radio id={option.name} name="dataset" value={option.name} defaultChecked={context.dataset === option} />
             <a className="ml-3 flex-1 whitespace-nowrap">{option.name}</a>
             {option.type !== null ? <Badge>{option.type}</Badge> : null}
           </div>
@@ -48,10 +35,15 @@ const ExistingData = (context: typeof AppContext) => {
   );
 };
 
+interface DatasetType {
+  name: string;
+  description: string;
+}
+
 const DataPage: NextPage = () => {
   const context = useContext(AppContext);
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [taskCategory, setTaskCategory] = useState('Computer Vision');
   const [taskType, setTaskType] = useState(null);
@@ -60,11 +52,11 @@ const DataPage: NextPage = () => {
   const [trainData, setTrainData] = useState(null);
   const [testData, setTestData] = useState(null);
 
-  const tabs = [
+  const tabs: DatasetType[] = [
     { name: 'Existing Dataset', description: 'Choose an existing dataset.' },
     { name: 'Custom Dataset', description: 'Choose a custom dataset.' },
   ];
-  const [selected, setSelected] = useState(tabs[0]);
+  const [selected, setSelected] = useState<DatasetType>(tabs[0]);
 
   return (
     <>
@@ -74,18 +66,23 @@ const DataPage: NextPage = () => {
         <Card className="text-left">
           <>
             <ButtonGroup
-              options={tabs}
-              onChange={(value: object) => {
-                context.setDataset(value);
-                setSelected(value);
+              options={tabs.map((tab) => {
+                return {
+                  name: tab.name,
+                  object: tab,
+                };
+              })}
+              onChange={(option: ButtonOption) => {
+                // context.setDatasetType(value);
+                option.object && setSelected(option.object as DatasetType);
               }}
               defaultSelected={tabs[0]}
             />
             {selected.name === 'Existing Dataset' ? (
-              ExistingData(context)
+              DataSetSelector(context)
             ) : (
               <div id="customForm">
-                <div id="nameInput" className='my-3'>
+                <div id="nameInput" className="my-3">
                   <div className="mb-2 block">
                     <Label htmlFor="name" value="Name" />
                   </div>
@@ -105,7 +102,7 @@ const DataPage: NextPage = () => {
                     }}
                   >
                     {TASK_CATEGORIES.map((category) => (
-                      <option>{category}</option>
+                      <option key={category}>{category}</option>
                     ))}
                   </Select>
                 </div>
@@ -115,8 +112,8 @@ const DataPage: NextPage = () => {
                       <Label htmlFor="taskType" value="Task Type" />
                     </div>
                     <Select id="taskType" required={true}>
-                      {TASK_TYPES[taskCategory].map((key, value) => (
-                        <option>{key}</option>
+                      {TASK_TYPES[taskCategory].map((type) => (
+                        <option key={type}>{type}</option>
                       ))}
                     </Select>
                   </div>
@@ -145,7 +142,7 @@ const DataPage: NextPage = () => {
                   </div>
                   <Select id="loss" required={true}>
                     {Object.entries(LOSS_FUNCTIONS).map(([key, value]) => (
-                      <option>{value.name}</option>
+                      <option key={key}>{value.name}</option>
                     ))}
                   </Select>
                 </div>
@@ -155,7 +152,7 @@ const DataPage: NextPage = () => {
                   </div>
                   <Select id="loss" required={true}>
                     {Object.entries(PERFORMANCE_METRICS).map(([key, value]) => (
-                      <option>{value.name}</option>
+                      <option key={key}>{value.name}</option>
                     ))}
                   </Select>
                 </div>
@@ -177,13 +174,12 @@ const DataPage: NextPage = () => {
 
         <Button
           text="Analyze"
-          className="w-full"
           disabled={context.dataset === null}
           loading={loading}
           onClick={async () => {
             setLoading(true);
             const res = await evaluateModel(context.modelStateFile, context.modelArchitectureFile, context.dataset);
-            if (res == undefined) {
+            if (res === undefined) {
               setLoading(false);
               setErrorMessage('Something went wrong. Please try again later. ');
             } else if (!res.ok) {
@@ -191,7 +187,6 @@ const DataPage: NextPage = () => {
               setErrorMessage('Error: ' + res.statusText);
             } else {
               const results = await res.json();
-              console.log('Results', results);
               context.setOriginalResults(results);
               setLoading(false);
               router.push('/goal');

@@ -1,14 +1,20 @@
 import React, { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { Accept, FileRejection, useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import { Alert } from 'flowbite-react';
 
-function Dropzone({ file, setFile, acceptedTypes }) {
-  const [errorMessage, setErrorMessage] = useState(null);
+interface DropzoneProps {
+  file: File | null;
+  setFile: (file: File | null) => void;
+  acceptedTypes: Accept;
+}
 
-  const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
+function Dropzone({ file, setFile, acceptedTypes }: DropzoneProps) {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
     setFile(acceptedFiles[0]);
-    let message = acceptedFiles.length > 0 ? null : rejectedFiles.length > 0 ? 'Wrong file type' : null;
+    const message = acceptedFiles.length > 0 ? null : rejectedFiles.length > 0 ? 'Wrong file type' : null;
     setErrorMessage(message);
   }, []);
 

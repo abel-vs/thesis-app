@@ -1,6 +1,12 @@
+import Dataset from '../interfaces/Dataset';
+
 const TASK_CATEGORIES = ['Computer Vision', 'Natural Language Processing'];
 
-const TASK_TYPES = {
+interface TaskTypes {
+  [category: string]: string[];
+}
+
+const TASK_TYPES: TaskTypes = {
   'Computer Vision': ['Image Classification', 'Object Detection', 'Image Segmentation'],
   'Natural Language Processing': [
     'Text Classification',
@@ -11,22 +17,26 @@ const TASK_TYPES = {
   ],
 };
 
-const DATASETS = [
+const DATASETS: Dataset[] = [
   {
     name: 'MNIST',
     type: 'Image Classification',
+    category: 'Computer Vision',
   },
   {
     name: 'GLUE',
     type: 'Text Classification',
+    category: 'Natural Language Processing',
   },
   {
     name: 'CIFAR-10',
     type: 'Image Classification',
+    category: 'Computer Vision',
   },
   {
     name: 'WikiText',
     type: 'Text Generation',
+    category: 'Natural Language Processing',
   },
 ];
 

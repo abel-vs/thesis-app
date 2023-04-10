@@ -1,17 +1,21 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import router from 'next/router';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import Button from '../components/Button';
-import AppContext from '../context/AppContext';
+import { AppContext } from '../context/AppContext';
 import Code from '../components/Code';
 import TitleBlock from '../components/Title';
 import { BeakerIcon, CheckCircleIcon, ChipIcon, ScissorsIcon, QuestionMarkCircleIcon } from '@heroicons/react/solid';
 import { Alert, Card } from 'flowbite-react';
 import { compressModel } from '../logic/api';
-import { getPerformanceMetric } from '../logic/datasets';
+import Action from '../interfaces/Action';
 
-const CompressionIcon = ({ type }) => {
+interface CompressionIconProps {
+  type: string;
+}
+
+const CompressionIcon = ({ type }: CompressionIconProps) => {
   if (type === 'pruning') {
     return <ScissorsIcon className="h-10 mr-2" />;
   } else if (type === 'quantization') {
@@ -22,8 +26,13 @@ const CompressionIcon = ({ type }) => {
     return <QuestionMarkCircleIcon className="h-10 mr-2" />;
   }
 };
+interface SelectableCardProps {
+  children: React.ReactNode;
+  className: string;
+  onClick: (selected: boolean) => void;
+}
 
-const SelectableCard = ({ children, className, onClick }) => {
+const SelectableCard = ({ children, className, onClick }: SelectableCardProps) => {
   const [selected, setSelected] = useState(true);
   return (
     <Card
@@ -41,13 +50,13 @@ const SelectableCard = ({ children, className, onClick }) => {
   );
 };
 
-const ActionCard = ({ action, onClick }) => {
+interface ActionCardProps {
+  action: Action;
+  onClick: (selected: boolean) => void;
+}
+const ActionCard = ({ action, onClick }: ActionCardProps) => {
   return (
-    <SelectableCard
-      className="m-6"
-      key={action.name}
-      onClick={onClick}
-    >
+    <SelectableCard className="m-6" key={action.name} onClick={onClick}>
       <h3 className="text-2xl font-bold flex flex-row items-center capitalize">
         <CompressionIcon type={action.type} />
         {action.type}
@@ -60,30 +69,26 @@ const ActionCard = ({ action, onClick }) => {
   );
 };
 
-
-
-
 const CompressionPage: NextPage = () => {
   const context = useContext(AppContext);
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  if (context.compressionActions === undefined) {
-    router.push('/');
-    return;
-  } 
+  useEffect(() => {
+    if (!context.originalResults || !context.dataset) {
+      router.push('/fallback-page'); // Replace with the desired fallback URL
+    }
+  }, [context]);
 
-  const [selectedActions, setSelectedActions] = useState(context.compressionActions as Object[]) ;
+  const [selectedActions, setSelectedActions] = useState(context.compressionActions as Action[]);
 
-  const removeAction = (value: Object) => {
-    setSelectedActions(actions => actions.filter(element => element !== value));
+  const removeAction = (action: Action) => {
+    setSelectedActions((actions) => actions.filter((element) => element !== action));
   };
 
-  const addAction = (action: Object) => {
-    setSelectedActions(actions => [...actions, action]);
+  const addAction = (action: Action) => {
+    setSelectedActions((actions) => [...actions, action]);
   };
-  
-
 
   return (
     <>
@@ -95,15 +100,19 @@ const CompressionPage: NextPage = () => {
       <div className="my-6 flex flex-wrap items-center justify-around">
         {context.compressionActions === null
           ? 'No actions suggested'
-          : context.compressionActions.map((x) => <ActionCard action={x} onClick={
-            (selected: boolean) => {
-              if(selected){
-                addAction(x)
-              } else{
-                removeAction(x)
-              }
-            }
-          }/>)}
+          : context.compressionActions.map((x) => (
+              <ActionCard
+                action={x}
+                key={x.name}
+                onClick={(selected: boolean) => {
+                  if (selected) {
+                    addAction(x);
+                  } else {
+                    removeAction(x);
+                  }
+                }}
+              />
+            ))}
 
         <div className="flex flex-row w-full m-8">
           <Link href="/goal" className="flex-none w-10 mr-2">
@@ -124,7 +133,7 @@ const CompressionPage: NextPage = () => {
                 compression_type: context.compressionType,
                 compression_target: context.compressionTarget,
               });
-              if (res == undefined) {
+              if (res === undefined) {
                 setLoading(false);
                 setErrorMessage('Something went wrong on the server. Please try again later. ');
               } else if (!res.ok) {

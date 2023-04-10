@@ -1,6 +1,11 @@
 import GradientText from './GradientText';
 
-function TitleBlock({ title, subtitle = '' }) {
+interface TitleBlockProps {
+  title: string;
+  subtitle?: string;
+}
+
+function TitleBlock({ title, subtitle = '' }: TitleBlockProps) {
   return (
     <>
       <h1 className="text-5xl font-bold">

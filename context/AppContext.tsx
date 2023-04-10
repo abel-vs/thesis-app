@@ -1,26 +1,45 @@
 import { createContext } from 'react';
+import Dataset from '../interfaces/Dataset';
+import Action from '../interfaces/Action';
+import Results from '../interfaces/Results';
 
 const dispatchFunction = (value: any) => {
   return;
 };
 
-type Results = {
-  score: number;
-  model_size: number;
-  params: number;
-  macs: number;
-  batch_duration: number;
-  data_duration: number;
-};
+export interface AppState {
+  modelStateFile: File | null;
+  setModelState: (value: File | null) => void;
+  modelArchitectureFile: File | null;
+  setModelArchitecture: (value: File | null) => void;
+  dataset: Dataset | null;
+  setDataset: (value: Dataset | null) => void;
+  compressionType: string;
+  setCompressionType: (value: string) => void;
+  compressionTarget: number;
+  setCompressionTarget: (value: number) => void;
+  performanceTarget: number;
+  setPerformanceTarget: (value: number) => void;
+  compressionActions: Action[];
+  setCompressionActions: (value: Action[]) => void;
+  originalResults: Results | null;
+  setOriginalResults: (value: Results | null) => void;
+  compressedResults: Results | null;
+  setCompressedResults: (value: Results | null) => void;
+  compressedFile: File | null;
+  setCompressedFile: (value: File | null) => void;
+  compressedArchitecture: string;
+  setCompressedArchitecture: (value: string) => void;
+}
 
-const AppContext = createContext({
+export const AppContext = createContext<AppState>({
   modelStateFile: null,
   setModelState: dispatchFunction,
   modelArchitectureFile: null,
   setModelArchitecture: dispatchFunction,
-  dataset: "",
+  dataset: null,
   setDataset: dispatchFunction,
-  compressionType: "Model Size",
+  compressionType: 'Model Size',
   setCompressionType: dispatchFunction,
   compressionTarget: 1,
   setCompressionTarget: dispatchFunction,
@@ -34,8 +53,6 @@ const AppContext = createContext({
   setCompressedResults: dispatchFunction,
   compressedFile: null,
   setCompressedFile: dispatchFunction,
-  compressedArchitecture: "",
+  compressedArchitecture: '',
   setCompressedArchitecture: dispatchFunction,
 });
-
-export default AppContext;

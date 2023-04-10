@@ -1,19 +1,20 @@
-import { useContext, useState } from 'react';
-import TitleBlock from '../components/Title';
-import AppContext from '../context/AppContext';
-import { CheckIcon, LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicons/react/solid';
+import { Slider } from '@mui/joy';
+import { Alert, Card, Table } from 'flowbite-react';
 import Link from 'next/link';
+import router from 'next/router';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import Button from '../components/Button';
 import Tabs from '../components/Tabs';
-import { RangeSlider, RangeSliderProps, Alert, Table, Card } from 'flowbite-react';
-import { Slider } from '@mui/joy';
+import TitleBlock from '../components/Title';
 import { analyzeModel } from '../logic/api';
-import router from 'next/router';
-import CompressionPage from './compression';
 import { getPerformanceMetric } from '../logic/datasets';
-import Code from '../components/Code';
+import { AppContext } from '../context/AppContext';
 
-const TableTitle = ({ text }) => {
+interface TableTitleProps {
+  text: string;
+}
+
+const TableTitle = ({ text }: TableTitleProps) => {
   return <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{text}</Table.Cell>;
 };
 
@@ -25,75 +26,89 @@ export default function Goal() {
   const results = context.originalResults;
   const nf = Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 
+  useLayoutEffect(() => {
+    console.log('effect in use');
+    router.push('/');
+
+    // routingEffect(context, router);
+  }, [context]);
+
   return (
     <>
       <TitleBlock title="Goal" subtitle="Select a compression and performance goal." />
 
       <Card className="w-full mt-10 text-left">
         <h3 className="text-2xl font-bold">Current Performance</h3>
-        <Table className="border-spacing-2">
-          <Table.Head>
-            <Table.HeadCell>Metric</Table.HeadCell>
-            <Table.HeadCell>Current</Table.HeadCell>
-            <Table.HeadCell>Goal</Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <TableTitle text="Accuracy" />
-              <Table.Cell>{results.score.toFixed(2)} %</Table.Cell>
-              <Table.Cell>{context.performanceTarget.toFixed(2)} %</Table.Cell>
-            </Table.Row>
 
-            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <TableTitle text="Model size" />
-              <Table.Cell>{results.model_size.toFixed(2)} MB</Table.Cell>
-              <Table.Cell>
-                {context.compressionType === 'Model Size'
-                  ? (results.model_size * (1 - context.compressionTarget / 100)).toFixed(2) + ' MB'
-                  : '-'}
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <TableTitle text="Number of parameters" />
-              <Table.Cell>{nf.format(results.params)}</Table.Cell>
-              <Table.Cell>
-                {context.compressionType === 'Model Size'
-                  ? nf.format(results.params * (1 - context.compressionTarget / 100))
-                  : '-'}
-              </Table.Cell>
-            </Table.Row>
+        {results ? (
+          <Table className="border-spacing-2">
+            <Table.Head>
+              <Table.HeadCell>Metric</Table.HeadCell>
+              <Table.HeadCell>Current</Table.HeadCell>
+              <Table.HeadCell>Goal</Table.HeadCell>
+            </Table.Head>
+            <Table.Body className="divide-y">
+              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <TableTitle text="Accuracy" />
+                <Table.Cell>{results.score.toFixed(2)} %</Table.Cell>
+                <Table.Cell>{context.performanceTarget.toFixed(2)} %</Table.Cell>
+              </Table.Row>
 
-            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <TableTitle text="Number of MACs" />
-              <Table.Cell>{nf.format(results.macs)}</Table.Cell>
-              <Table.Cell>
-                {context.compressionType === 'Energy Usage'
-                  ? nf.format(results.macs * (1 - context.compressionTarget / 100))
-                  : '-'}
-              </Table.Cell>
-            </Table.Row>
+              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <TableTitle text="Model size" />
+                <Table.Cell>{results.model_size.toFixed(2)} MB</Table.Cell>
+                <Table.Cell>
+                  {context.compressionType === 'Model Size'
+                    ? (results.model_size * (1 - context.compressionTarget / 100)).toFixed(2) + ' MB'
+                    : '-'}
+                </Table.Cell>
+              </Table.Row>
+              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <TableTitle text="Number of parameters" />
+                <Table.Cell>{nf.format(results.params)}</Table.Cell>
+                <Table.Cell>
+                  {context.compressionType === 'Model Size'
+                    ? nf.format(results.params * (1 - context.compressionTarget / 100))
+                    : '-'}
+                </Table.Cell>
+              </Table.Row>
 
-            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <TableTitle text="Inference time (per batch)" />
-              <Table.Cell>{results.batch_duration.toFixed(2)} ms</Table.Cell>
-              <Table.Cell>
-                {context.compressionType === 'Inference Time'
-                  ? (results.batch_duration * (1 - context.compressionTarget / 100)).toFixed(2) + ' ms'
-                  : '-'}
-              </Table.Cell>
-            </Table.Row>
+              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <TableTitle text="Number of MACs" />
+                <Table.Cell>{nf.format(results.macs)}</Table.Cell>
+                <Table.Cell>
+                  {context.compressionType === 'Energy Usage'
+                    ? nf.format(results.macs * (1 - context.compressionTarget / 100))
+                    : '-'}
+                </Table.Cell>
+              </Table.Row>
 
-            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <TableTitle text="Inference time (per data point)" />
-              <Table.Cell>{results.data_duration.toFixed(4)} ms</Table.Cell>
-              <Table.Cell>
-                {context.compressionType === 'Inference Time'
-                  ? (results.data_duration * (1 - context.compressionTarget / 100)).toFixed(2) + ' ms'
-                  : '-'}
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
-        </Table>
+              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <TableTitle text="Inference time (per batch)" />
+                <Table.Cell>{results.batch_duration.toFixed(2)} ms</Table.Cell>
+                <Table.Cell>
+                  {context.compressionType === 'Inference Time'
+                    ? (results.batch_duration * (1 - context.compressionTarget / 100)).toFixed(2) + ' ms'
+                    : '-'}
+                </Table.Cell>
+              </Table.Row>
+
+              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <TableTitle text="Inference time (per data point)" />
+                <Table.Cell>{results.data_duration.toFixed(4)} ms</Table.Cell>
+                <Table.Cell>
+                  {context.compressionType === 'Inference Time'
+                    ? (results.data_duration * (1 - context.compressionTarget / 100)).toFixed(2) + ' ms'
+                    : '-'}
+                </Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
+        ) : (
+          <Alert color="warning" className="mt-4">
+            No results available. Please run an analysis first.
+          </Alert>
+        )}
       </Card>
 
       <Card className="w-full my-6 text-left">

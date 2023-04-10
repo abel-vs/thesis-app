@@ -3,17 +3,17 @@ import type { NextPage } from 'next';
 import DropZone from '../components/DropZone';
 import Link from 'next/link';
 import Button from '../components/Button';
-import AppContext from '../context/AppContext';
+import { AppContext } from '../context/AppContext';
 import Code from '../components/Code';
 import TitleBlock from '../components/Title';
 import { Card, Select } from 'flowbite-react';
 import InfoLink from '../components/InfoLink';
-import axios from 'axios';
 import { getClasses } from '../logic/api';
+import ModelClass from '../interfaces/ModelClass';
 
 const ModelPage: NextPage = () => {
   const context = useContext(AppContext);
-  const [classes, setClasses] = useState([]);
+  const [classes, setClasses] = useState<ModelClass[]>([]);
 
   return (
     <>
@@ -39,7 +39,7 @@ const ModelPage: NextPage = () => {
           </p>
           <DropZone
             file={context.modelArchitectureFile}
-            setFile={async (file: File) => {
+            setFile={async (file: File | null) => {
               context.setModelArchitecture(file);
               if (file !== null) {
                 const res = await getClasses(file);
@@ -52,7 +52,7 @@ const ModelPage: NextPage = () => {
           />
           {classes.length === 1 && (
             <p>
-              Class found: <Code>{classes[0]}</Code>
+              Class found: <Code>{classes[0].name}</Code>
             </p>
           )}
           {classes.length > 1 && (
@@ -60,7 +60,7 @@ const ModelPage: NextPage = () => {
               <p>Select your model class: </p>
               <Select id="classes" required={true}>
                 {classes.map((model_class) => (
-                  <option>{model_class.name}</option>
+                  <option key={model_class.name}>{model_class.name}</option>
                 ))}
               </Select>
             </div>

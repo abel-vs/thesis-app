@@ -1,11 +1,16 @@
-import { CheckIcon, LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicons/react/solid';
+import { LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicons/react/solid';
 import { useState, useContext } from 'react';
 import { Slider } from '@mui/joy';
-import AppContext from '../context/AppContext';
+import AppState from '../context/AppContext';
 import ButtonGroup from './ButtonGroup';
 
+interface Tab {
+  name: string;
+  icon: JSX.Element;
+  description: string;
+}
 
-const tabs = [
+const tabs: Tab[] = [
   {
     name: 'Model Size',
     icon: <DatabaseIcon />,
@@ -26,10 +31,9 @@ const tabs = [
   },
 ];
 
-
 export default function Tabs() {
   const context = useContext(AppContext);
-  const [selected, setSelected] = useState(tabs.find(x => x.name === context.compressionType));
+  const [selected, setSelected] = useState<Tab>(tabs.find((x) => x.name === context.compressionType) ?? tabs[0]);
 
   return (
     <div>
@@ -44,8 +48,7 @@ export default function Tabs() {
           name="tabs"
           className="block w-full focus:ring-green-500 focus:border-green-500 border-gray-300 rounded-md"
           defaultValue={selected.name}
-          onChange={(e) => context.setCompressionType(e.target.value)
-          }
+          onChange={(e) => context.setCompressionType(e.target.value)}
         >
           {tabs.map((tab) => (
             <option key={tab.name}>{tab.name}</option>
@@ -58,7 +61,8 @@ export default function Tabs() {
         <ButtonGroup
           options={tabs}
           defaultSelected={tabs[0]}
-          onChange={(tab) => context.setCompressionType(tab.name)} />
+          onChange={(tab) => context.setCompressionType(tab.name)}
+        />
       </div>
       {/* Content */}
       <div className="mt-4">
@@ -70,7 +74,7 @@ export default function Tabs() {
         <Slider
           color="success"
           value={context.compressionTarget}
-          onChange={(e) => context.setCompressionTarget(e.target.value)}
+          onChange={(e) => context.setCompressionTarget(e.target !== null && e.target)}
         />
       </div>
     </div>
