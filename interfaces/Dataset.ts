@@ -1,6 +1,9 @@
+import Metric from './Metric';
+import TaskType from './TaskType';
+
 export default interface Dataset {
   name: string;
-  type: string;
+  type: TaskType;
   category: string;
-  metric: string;
+  metric: Metric;
 }

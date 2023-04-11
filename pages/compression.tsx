@@ -121,34 +121,40 @@ const CompressionPage: NextPage = () => {
             text="Compress"
             loading={loading}
             disabled={selectedActions.length === 0}
-            onClick={async () => {
-              setLoading(true);
-              const res = await compressModel(context.modelStateFile, context.modelArchitectureFile, {
-                actions: selectedActions,
-                // actions: context.compressionActions.filter((action) => action.selected),
-                dataset: context.dataset,
-                performance_target: context.performanceTarget,
-                compression_type: context.compressionType,
-                compression_target: context.compressionTarget,
-              });
-              if (res === undefined) {
-                setLoading(false);
-                setErrorMessage('Something went wrong on the server. Please try again later. ');
-              } else if (!res.ok) {
-                setLoading(false);
-                setErrorMessage('Error: ' + res.statusText);
-                console.log(res);
-                console.log(await res.json());
-              } else {
-                const data = await res.json();
-                context.setOriginalResults(data.original_results);
-                context.setCompressedResults(data.compressed_results);
-                context.setCompressedFile(data.compressed_model);
-                context.setCompressedArchitecture(data.compressed_architecture);
-                setLoading(false);
-                router.push('/results');
-              }
-            }}
+            onClick={
+              context.modelStateFile !== null && context.modelArchitectureFile
+                ? async () => {
+                    setLoading(true);
+                    const res = await compressModel(context.modelStateFile!, context.modelArchitectureFile!, {
+                      actions: selectedActions,
+                      // actions: context.compressionActions.filter((action) => action.selected),
+                      dataset: context.dataset,
+                      performance_target: context.performanceTarget,
+                      compression_type: context.compressionType,
+                      compression_target: context.compressionTarget,
+                    });
+                    if (res === undefined) {
+                      setLoading(false);
+                      setErrorMessage('Something went wrong on the server. Please try again later. ');
+                    } else if (!res.ok) {
+                      setLoading(false);
+                      setErrorMessage('Error: ' + res.statusText);
+                      console.log(res);
+                      console.log(await res.json());
+                    } else {
+                      const data = await res.json();
+                      context.setOriginalResults(data.original_results);
+                      context.setCompressedResults(data.compressed_results);
+                      context.setCompressedFile(data.compressed_model);
+                      context.setCompressedArchitecture(data.compressed_architecture);
+                      setLoading(false);
+                      router.push('/results');
+                    }
+                  }
+                : () => {
+                    setErrorMessage('Please upload a model and architecture file.');
+                  }
+            }
           />
         </div>
         <ErrorAlert errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
