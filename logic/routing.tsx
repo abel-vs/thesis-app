@@ -1,25 +1,45 @@
-import { NextRouter } from 'next/router';
 import { AppState } from '../context/AppContext';
 
-export default function routingEffect(context: AppState, router: NextRouter) {
+export default function routingLogic(context: AppState) {
   // No model files provided
   if (!context.modelStateFile || !context.modelArchitectureFile) {
-    router.push('/model');
-    return;
+    return {
+      redirect: {
+        destination: '/model',
+        permanent: false,
+      },
+    };
   }
   // No dataset configured
   if (!context.dataset || !context.originalResults) {
-    router.push('/data');
-    return;
+    return {
+      redirect: {
+        destination: '/data',
+        permanent: false,
+      },
+    };
   }
   // No compression actions received
   if (!context.compressionActions) {
-    router.push('/goal');
-    return;
+    return {
+      redirect: {
+        destination: '/goal',
+        permanent: false,
+      },
+    };
   }
   // No compressed model received
   if (!context.originalResults || !context.compressedResults) {
-    router.push('/compression');
-    return;
+    return {
+      redirect: {
+        destination: '/compression',
+        permanent: false,
+      },
+    };
   }
+
+  // Continue with normal page rendering
+  return {
+    props: {},
+  };
 }
