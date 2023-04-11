@@ -1,6 +1,7 @@
+import { NextRouter } from 'next/router';
 import { AppState } from '../context/AppContext';
 
-export default function routingLogic(context: AppState) {
+export function routingLogic(context: AppState) {
   // No model files provided
   if (!context.modelStateFile || !context.modelArchitectureFile) {
     return {
@@ -42,4 +43,27 @@ export default function routingLogic(context: AppState) {
   return {
     props: {},
   };
+}
+
+export function routingEffect(context: AppState, router: NextRouter) {
+  // No model files provided
+  if (!context.modelStateFile || !context.modelArchitectureFile) {
+    router.push('/model');
+    return;
+  }
+  // No dataset configured
+  else if (!context.dataset || !context.originalResults) {
+    router.push('/data');
+    return;
+  }
+  // No compression actions received
+  else if (!context.compressionActions || !context.compressionActions.length) {
+    router.push('/goal');
+    return;
+  }
+  // No compressed model received
+  else if (!context.originalResults || !context.compressedResults) {
+    router.push('/compression');
+    return;
+  }
 }

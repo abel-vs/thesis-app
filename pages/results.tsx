@@ -1,4 +1,4 @@
-import { Card, Table } from 'flowbite-react';
+import { Alert, Card, Table } from 'flowbite-react';
 import { NextPage } from 'next';
 import Button from '../components/Button';
 import TitleBlock from '../components/Title';
@@ -40,7 +40,11 @@ const ResultsPage: NextPage = () => {
       </Card>
       <Card className="w-full my-5 text-left">
         <h2 className="text-2xl font-bold">New Architecture</h2>
-        <Code>{context.compressedArchitecture}</Code>
+        {context.compressedArchitecture ? (
+          <Code>{context.compressedArchitecture}</Code>
+        ) : (
+          <Alert color="warning">No architecture found</Alert>
+        )}
       </Card>
       <Card className="w-full my-5">
         {before && after ? (
@@ -105,7 +109,7 @@ const ResultsPage: NextPage = () => {
             </Table.Body>
           </Table>
         ) : (
-          <div className="text-center">No results found</div>
+          <Alert color="warning">No results found</Alert>
         )}
       </Card>
       <div className="w-full flex flex-row my-10">

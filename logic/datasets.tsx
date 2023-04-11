@@ -1,4 +1,6 @@
 import Dataset from '../interfaces/Dataset';
+import Loss from '../interfaces/Loss';
+import Metric from '../interfaces/Metric';
 
 const TASK_CATEGORIES = ['Computer Vision', 'Natural Language Processing'];
 
@@ -22,25 +24,33 @@ const DATASETS: Dataset[] = [
     name: 'MNIST',
     type: 'Image Classification',
     category: 'Computer Vision',
+    metric: 'Accuracy',
   },
   {
     name: 'GLUE',
     type: 'Text Classification',
     category: 'Natural Language Processing',
+    metric: 'Accuracy',
   },
   {
     name: 'CIFAR-10',
     type: 'Image Classification',
     category: 'Computer Vision',
+    metric: 'Accuracy',
   },
   {
     name: 'WikiText',
     type: 'Text Generation',
     category: 'Natural Language Processing',
+    metric: 'Perplexity',
   },
 ];
 
-const LOSS_FUNCTIONS = {
+interface LossFunctions {
+  [name: string]: Loss;
+}
+
+const LOSS_FUNCTIONS: LossFunctions = {
   CELoss: {
     name: 'CrossEntropyLoss',
     info: 'This loss function is commonly used for multi-class classification problems. It applies a softmax function to the model output and computes the negative log-likelihood loss between the predicted probabilities and the true labels.',
@@ -83,7 +93,11 @@ const LOSS_FUNCTIONS = {
   },
 };
 
-const PERFORMANCE_METRICS = {
+interface Metrics {
+  [name: string]: Metric;
+}
+
+const PERFORMANCE_METRICS: Metrics = {
   accuracy: {
     name: 'Accuracy',
     info: 'This metric measures the proportion of correctly classified instances in a classification problem.',
@@ -126,20 +140,4 @@ const PERFORMANCE_METRICS = {
   },
 };
 
-// Function that returns the performance metric for a given dataset as a string
-const getPerformanceMetric = (dataset: string) => {
-  switch (dataset) {
-    case 'MNIST':
-      return 'accuracy';
-    case 'CIFAR-10':
-      return 'accuracy';
-    case 'GLUE':
-      return 'accuracy';
-    case 'WikiText':
-      return 'perplexity';
-    default:
-      return 'accuracy';
-  }
-};
-
-export { TASK_CATEGORIES, TASK_TYPES, DATASETS, LOSS_FUNCTIONS, PERFORMANCE_METRICS, getPerformanceMetric };
+export { TASK_CATEGORIES, TASK_TYPES, DATASETS, LOSS_FUNCTIONS, PERFORMANCE_METRICS };

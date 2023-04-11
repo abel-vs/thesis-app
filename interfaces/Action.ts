@@ -3,4 +3,5 @@ export default interface Action {
   name: string;
   description: string;
   settings: object;
+  selected: boolean;
 }

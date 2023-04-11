@@ -3,7 +3,7 @@ import Dataset from '../interfaces/Dataset';
 import Action from '../interfaces/Action';
 import Results from '../interfaces/Results';
 
-const dispatchFunction = (value: any) => {
+const dispatchFunction = () => {
   return;
 };
 

@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
-import router from 'next/router';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import Button from '../components/Button';
@@ -10,7 +9,8 @@ import { BeakerIcon, CheckCircleIcon, ChipIcon, ScissorsIcon, QuestionMarkCircle
 import { Alert, Card } from 'flowbite-react';
 import { compressModel } from '../logic/api';
 import Action from '../interfaces/Action';
-
+import ErrorAlert from '../components/ErrorAlert';
+import { useRouter } from 'next/router';
 interface CompressionIconProps {
   type: string;
 }
@@ -71,14 +71,10 @@ const ActionCard = ({ action, onClick }: ActionCardProps) => {
 
 const CompressionPage: NextPage = () => {
   const context = useContext(AppContext);
+  const router = useRouter();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!context.originalResults || !context.dataset) {
-      router.push('/fallback-page'); // Replace with the desired fallback URL
-    }
-  }, [context]);
 
   const [selectedActions, setSelectedActions] = useState(context.compressionActions as Action[]);
 
@@ -97,22 +93,24 @@ const CompressionPage: NextPage = () => {
         subtitle="We analyzed your model and suggest the following compression actions."
       />
       {/* <p>{context.compressionActions[0.name]}</p> */}
-      <div className="my-6 flex flex-wrap items-center justify-around">
-        {context.compressionActions === null
-          ? 'No actions suggested'
-          : context.compressionActions.map((x) => (
-              <ActionCard
-                action={x}
-                key={x.name}
-                onClick={(selected: boolean) => {
-                  if (selected) {
-                    addAction(x);
-                  } else {
-                    removeAction(x);
-                  }
-                }}
-              />
-            ))}
+      <div className="my-6 flex flex-wrap items-center justify-around w-full">
+        {context.compressionActions.length === 0 ? (
+          <Card className="w-full mx-8">No actions suggested.</Card>
+        ) : (
+          context.compressionActions.map((x) => (
+            <ActionCard
+              action={x}
+              key={x.name}
+              onClick={(selected: boolean) => {
+                if (selected) {
+                  addAction(x);
+                } else {
+                  removeAction(x);
+                }
+              }}
+            />
+          ))
+        )}
 
         <div className="flex flex-row w-full m-8">
           <Link href="/goal" className="flex-none w-10 mr-2">
@@ -153,11 +151,7 @@ const CompressionPage: NextPage = () => {
             }}
           />
         </div>
-        {errorMessage && (
-          <Alert color="failure" onDismiss={() => setErrorMessage(null)}>
-            {errorMessage}
-          </Alert>
-        )}
+        <ErrorAlert errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
       </div>
     </>
   );

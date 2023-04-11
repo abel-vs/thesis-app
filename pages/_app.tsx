@@ -4,18 +4,21 @@ import { AppContext } from '../context/AppContext';
 import { useState } from 'react';
 import Head from 'next/head';
 import { CssVarsProvider } from '@mui/joy';
+import Dataset from '../interfaces/Dataset';
+import Action from '../interfaces/Action';
+import Results from '../interfaces/Results';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [modelStateFile, setModelState] = useState<File | null>(null);
   const [modelArchitectureFile, setModelArchitecture] = useState<File | null>(null);
-  const [dataset, setDataset] = useState<string | null>(null);
-  const [compressionType, setCompressionType] = useState<string | null>('Model Size');
+  const [dataset, setDataset] = useState<Dataset | null>(null);
+  const [compressionType, setCompressionType] = useState<string>('Model Size');
   const [compressionTarget, setCompressionTarget] = useState<number>(50);
   const [performanceTarget, setPerformanceTarget] = useState<number>(95);
-  const [compressionActions, setCompressionActions] = useState([]);
-  const [originalResults, setOriginalResults] = useState([]);
-  const [compressedResults, setCompressedResults] = useState([]);
-  const [compressedFile, setCompressedFile] = useState(null);
+  const [compressionActions, setCompressionActions] = useState<Action[]>([]);
+  const [originalResults, setOriginalResults] = useState<Results | null>(null);
+  const [compressedResults, setCompressedResults] = useState<Results | null>(null);
+  const [compressedFile, setCompressedFile] = useState<File | null>(null);
   const [compressedArchitecture, setCompressedArchitecture] = useState('');
 
   return (

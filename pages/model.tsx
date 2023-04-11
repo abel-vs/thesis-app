@@ -10,10 +10,12 @@ import { Card, Select } from 'flowbite-react';
 import InfoLink from '../components/InfoLink';
 import { getClasses } from '../logic/api';
 import ModelClass from '../interfaces/ModelClass';
+import ErrorAlert from '../components/ErrorAlert';
 
 const ModelPage: NextPage = () => {
   const context = useContext(AppContext);
   const [classes, setClasses] = useState<ModelClass[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   return (
     <>
@@ -43,7 +45,7 @@ const ModelPage: NextPage = () => {
               context.setModelArchitecture(file);
               if (file !== null) {
                 const res = await getClasses(file);
-                setClasses(res.classes);
+                res ? setClasses(res.classes) : setErrorMessage('Error analyzing classes.');
               } else {
                 setClasses([]);
               }
@@ -78,6 +80,7 @@ const ModelPage: NextPage = () => {
           <Button text="Next" disabled={context.modelStateFile === null || context.modelArchitectureFile === null} />
         </Link>
       </div>
+      <ErrorAlert errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
     </>
   );
 };

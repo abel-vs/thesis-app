@@ -8,7 +8,7 @@ interface ButtonProps {
   loading?: boolean;
 }
 
-function Button({ text, className = '', onClick = () => {}, disabled = false, loading = false }: ButtonProps) {
+function Button({ text, className = '', onClick, disabled = false, loading = false }: ButtonProps) {
   return (
     <button
       className={

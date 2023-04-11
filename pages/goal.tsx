@@ -1,14 +1,14 @@
 import { Slider } from '@mui/joy';
 import { Alert, Card, Table } from 'flowbite-react';
 import Link from 'next/link';
-import router from 'next/router';
-import { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useContext, useState } from 'react';
 import Button from '../components/Button';
 import Tabs from '../components/Tabs';
 import TitleBlock from '../components/Title';
 import { analyzeModel } from '../logic/api';
-import { getPerformanceMetric } from '../logic/datasets';
 import { AppContext } from '../context/AppContext';
+import Action from '../interfaces/Action';
 
 interface TableTitleProps {
   text: string;
@@ -20,18 +20,13 @@ const TableTitle = ({ text }: TableTitleProps) => {
 
 export default function Goal() {
   const context = useContext(AppContext);
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const results = context.originalResults;
   const nf = Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
-
-  useLayoutEffect(() => {
-    console.log('effect in use');
-    router.push('/');
-
-    // routingEffect(context, router);
-  }, [context]);
 
   return (
     <>
@@ -105,9 +100,7 @@ export default function Goal() {
             </Table.Body>
           </Table>
         ) : (
-          <Alert color="warning" className="mt-4">
-            No results available. Please run an analysis first.
-          </Alert>
+          <Alert color="warning">No results available. Please run an analysis first.</Alert>
         )}
       </Card>
 
@@ -115,6 +108,14 @@ export default function Goal() {
         <h3 className="text-2xl font-bold">Compression Goal</h3>
         <p className="my-4">Select the compression goal you want to achieve.</p>
         <Tabs />
+        <label className="block mt-4 font-bold text-gray-900 dark:text-white">
+          Target {context.compressionType.toLowerCase()} reduction: {context.compressionTarget}%
+        </label>
+        <Slider
+          color="success"
+          value={context.compressionTarget}
+          onChange={(e) => e.target && context.setCompressionTarget(e.target.value)}
+        />
       </Card>
 
       <Card className=" w-full text-left">
@@ -123,19 +124,24 @@ export default function Goal() {
           Choose the maximal performance decrease. The model won't be further compressed if this would decrease the
           performance below this threshold.
         </p>
-        <p>
-          The <b>{context.dataset}</b> dataset uses <b>{getPerformanceMetric(context.dataset)}</b> as performance
-          metric.
-        </p>
-        <label className="block mt-4 font-bold text-gray-900 dark:text-white">
-          {getPerformanceMetric(context.dataset)} threshold : {context.performanceTarget}%
-        </label>
-        <Slider
-          color="success"
-          value={context.performanceTarget}
-          max={results.score.toFixed(2)}
-          onChange={(e) => context.setPerformanceTarget(e.target.value)}
-        />
+        {context.dataset ? (
+          <>
+            <p>
+              The <b>{context.dataset?.name}</b> dataset uses <b>{context.dataset?.metric}</b> as performance metric.
+            </p>
+            <label className="block mt-4 font-bold text-gray-900 dark:text-white">
+              {context.dataset?.metric} threshold : {context.performanceTarget}%
+            </label>
+            <Slider
+              color="success"
+              value={context.performanceTarget}
+              max={results?.score.toFixed(2)}
+              onChange={(e) => e.target && context.setPerformanceTarget(e.target.value)}
+            />
+          </>
+        ) : (
+          <Alert color="warning">No dataset available. Please select one first.</Alert>
+        )}
       </Card>
 
       <div className="flex flex-row w-full m-8">
@@ -147,22 +153,22 @@ export default function Goal() {
           text="Analyze"
           className="w-full"
           loading={loading}
+          disabled={context.modelStateFile && context.modelArchitectureFile ? false : true}
           onClick={async () => {
             setLoading(true);
-            const compression_actions: [] = await analyzeModel(context.modelStateFile, context.modelArchitectureFile, {
-              compression_goal: context.compressionType,
-              compression_target: context.compressionTarget,
-              performance_metric: getPerformanceMetric(context.dataset),
-              performance_target: context.performanceTarget,
-            });
+            const compression_actions: Action[] =
+              context.modelStateFile &&
+              context.modelArchitectureFile &&
+              (await analyzeModel(context.modelStateFile, context.modelArchitectureFile, {
+                compression_goal: context.compressionType,
+                compression_target: context.compressionTarget,
+                performance_metric: context.dataset?.metric,
+                performance_target: context.performanceTarget,
+              }));
             if (compression_actions === undefined) {
               setLoading(false);
               setErrorMessage('An error occured while analyzing the model.');
             } else {
-              compression_actions.forEach((action) => {
-                action.selected = true;
-              });
-              console.log(compression_actions);
               context.setCompressionActions(compression_actions);
               setLoading(false);
               router.push('/compression');

@@ -1,7 +1,7 @@
 import { LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicons/react/solid';
 import { useState, useContext } from 'react';
 import { Slider } from '@mui/joy';
-import AppState from '../context/AppContext';
+import { AppContext } from '../context/AppContext';
 import ButtonGroup from './ButtonGroup';
 
 interface Tab {
@@ -65,18 +65,7 @@ export default function Tabs() {
         />
       </div>
       {/* Content */}
-      <div className="mt-4">
-        {selected !== null ? selected.description : null}
-
-        <label className="block mt-4 font-bold text-gray-900 dark:text-white">
-          Target {context.compressionType.toLowerCase()} reduction: {context.compressionTarget}%
-        </label>
-        <Slider
-          color="success"
-          value={context.compressionTarget}
-          onChange={(e) => context.setCompressionTarget(e.target !== null && e.target)}
-        />
-      </div>
+      <div className="mt-4">{selected !== null ? selected.description : null}</div>
     </div>
   );
 }

@@ -1,14 +1,14 @@
 import { Alert, Card, FileInput, Label, Radio, Select, Tabs, TextInput } from 'flowbite-react';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import Button from '../components/Button';
 import TitleBlock from '../components/Title';
 import { AppState, AppContext } from '../context/AppContext';
 import Badge from '../components/Badge';
 import { DATASETS, LOSS_FUNCTIONS, TASK_CATEGORIES, PERFORMANCE_METRICS, TASK_TYPES } from '../logic/datasets';
 import InfoLink from '../components/InfoLink';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 import { evaluateModel } from '../logic/api';
 import { ButtonOption } from '../components/ButtonGroup';
 import ButtonGroup from '../components/ButtonGroup';
@@ -44,6 +44,8 @@ const DataPage: NextPage = () => {
   const context = useContext(AppContext);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const router = useRouter();
 
   const [taskCategory, setTaskCategory] = useState('Computer Vision');
   const [taskType, setTaskType] = useState(null);
