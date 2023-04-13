@@ -1,11 +1,18 @@
 import Dataset from '../interfaces/Dataset';
+import ModelDefinition from '../interfaces/ModelDefinition';
 
 const url = 'http://127.0.0.1:8000';
 
-const evaluateModel = async (model_state: File, model_architecture: File, dataset: Dataset) => {
+const evaluateModel = async (
+  model_state: File,
+  model_architecture: File,
+  model_definition: ModelDefinition,
+  dataset: Dataset
+) => {
   const form = new FormData();
   form.append('model_state', model_state);
   form.append('model_architecture', model_architecture);
+  form.append('model_definition', JSON.stringify(model_definition));
   form.append('dataset', dataset.name);
   try {
     const res = await fetch(url + '/evaluate', {
@@ -18,11 +25,18 @@ const evaluateModel = async (model_state: File, model_architecture: File, datase
   }
 };
 
-const analyzeModel = async (model_state: File, model_architecture: File, settings: object) => {
+const analyzeModel = async (
+  model_state: File,
+  model_architecture: File,
+  mode_definition: ModelDefinition,
+  settings: object
+) => {
   const form = new FormData();
   form.append('model_state', model_state);
   form.append('model_architecture', model_architecture);
+  form.append('model_definition', JSON.stringify(mode_definition));
   form.append('settings', JSON.stringify(settings));
+
   try {
     const res = await fetch(url + '/analyze', {
       method: 'POST',
@@ -35,12 +49,19 @@ const analyzeModel = async (model_state: File, model_architecture: File, setting
   }
 };
 
-const compressModel = async (model_state: File, model_architecture: File, settings: object) => {
+const compressModel = async (
+  model_state: File,
+  model_architecture: File,
+  model_definition: ModelDefinition,
+  settings: object
+) => {
   const form = new FormData();
   form.append('model_state', model_state);
   form.append('model_architecture', model_architecture);
+  form.append('model_definition', JSON.stringify(model_definition));
   form.append('settings', JSON.stringify(settings));
-  console.log(form);
+  console.log(form.get('model_definition'));
+  console.log(form.get('settings'));
   try {
     const res = await fetch(url + '/compress', {
       method: 'POST',
@@ -52,11 +73,11 @@ const compressModel = async (model_state: File, model_architecture: File, settin
   }
 };
 
-const getClasses = async (file: File) => {
+const getModulesMethods = async (file: File) => {
   const form = new FormData();
   form.append('file', file);
   try {
-    const res = await fetch(url + '/get-classes', {
+    const res = await fetch(url + '/get-modules-methods', {
       method: 'POST',
       body: form,
     });
@@ -66,4 +87,4 @@ const getClasses = async (file: File) => {
   }
 };
 
-export { evaluateModel, analyzeModel, compressModel, getClasses };
+export { evaluateModel, analyzeModel, compressModel, getModulesMethods };

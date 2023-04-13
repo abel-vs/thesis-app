@@ -1,4 +1,4 @@
-import { Alert, Card, Radio } from 'flowbite-react';
+import { Card, Radio } from 'flowbite-react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -9,7 +9,7 @@ import ButtonGroup, { ButtonOption } from '../components/ButtonGroup';
 import CustomDataForm from '../components/CustomDataForm';
 import InfoLink from '../components/InfoLink';
 import TitleBlock from '../components/Title';
-import { AppContext, AppState } from '../context/AppContext';
+import { AppContext, AppState } from '../interfaces/AppContext';
 import CustomDataset from '../interfaces/CustomDataset';
 import { evaluateModel } from '../logic/api';
 import DATASETS from '../logic/datasets';
@@ -93,19 +93,28 @@ const DataPage: NextPage = () => {
           }
           loading={loading}
           onClick={async () => {
-            setLoading(true);
-            const res = await evaluateModel(context.modelStateFile, context.modelArchitectureFile, context.dataset);
-            if (res === undefined) {
-              setLoading(false);
-              setErrorMessage('Something went wrong. Please try again later. ');
-            } else if (!res.ok) {
-              setLoading(false);
-              setErrorMessage('Error: ' + res.statusText);
+            if (context.modelStateFile && context.modelArchitectureFile && context.modelDefinition && context.dataset) {
+              setLoading(true);
+              const res = await evaluateModel(
+                context.modelStateFile,
+                context.modelArchitectureFile,
+                context.modelDefinition,
+                context.dataset
+              );
+              if (res === undefined) {
+                setLoading(false);
+                setErrorMessage('Something went wrong. Please try again later. ');
+              } else if (!res.ok) {
+                setLoading(false);
+                setErrorMessage('Error: ' + res.statusText);
+              } else {
+                const results = await res.json();
+                context.setOriginalResults(results);
+                setLoading(false);
+                router.push('/goal');
+              }
             } else {
-              const results = await res.json();
-              context.setOriginalResults(results);
-              setLoading(false);
-              router.push('/goal');
+              setErrorMessage('Please go back and provide model state file and model architecture file.');
             }
           }}
         />

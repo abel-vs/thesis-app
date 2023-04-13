@@ -1,7 +1,7 @@
 import { LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicons/react/solid';
 import { useState, useContext } from 'react';
 import { Slider } from '@mui/joy';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../interfaces/AppContext';
 import ButtonGroup from './ButtonGroup';
 
 interface Tab {

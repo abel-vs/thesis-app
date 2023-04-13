@@ -7,7 +7,7 @@ import Button from '../components/Button';
 import Tabs from '../components/Tabs';
 import TitleBlock from '../components/Title';
 import { analyzeModel } from '../logic/api';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../interfaces/AppContext';
 import Action from '../interfaces/Action';
 
 interface TableTitleProps {
@@ -127,10 +127,10 @@ export default function Goal() {
         {context.dataset ? (
           <>
             <p>
-              The <b>{context.dataset?.name}</b> dataset uses <b>{context.dataset?.metric}</b> as performance metric.
+              The <b>{context.dataset.name}</b> dataset uses <b>{context.dataset.metric.name}</b> as performance metric.
             </p>
             <label className="block mt-4 font-bold text-gray-900 dark:text-white">
-              {context.dataset?.metric} threshold : {context.performanceTarget}%
+              {context.dataset.metric.name} threshold : {context.performanceTarget}%
             </label>
             <Slider
               color="success"
@@ -159,10 +159,12 @@ export default function Goal() {
             const compression_actions: Action[] =
               context.modelStateFile &&
               context.modelArchitectureFile &&
-              (await analyzeModel(context.modelStateFile, context.modelArchitectureFile, {
+              context.modelDefinition &&
+              context.dataset &&
+              (await analyzeModel(context.modelStateFile, context.modelArchitectureFile, context.modelDefinition, {
                 compression_goal: context.compressionType,
                 compression_target: context.compressionTarget,
-                performance_metric: context.dataset?.metric,
+                performance_metric: context.dataset.metric.name,
                 performance_target: context.performanceTarget,
               }));
             if (compression_actions === undefined) {

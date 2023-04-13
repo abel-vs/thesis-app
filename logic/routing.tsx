@@ -1,5 +1,5 @@
 import { NextRouter } from 'next/router';
-import { AppState } from '../context/AppContext';
+import { AppState } from '../interfaces/AppContext';
 
 export function routingLogic(context: AppState) {
   // No model files provided

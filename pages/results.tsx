@@ -2,7 +2,7 @@ import { Alert, Card, Table } from 'flowbite-react';
 import { NextPage } from 'next';
 import Button from '../components/Button';
 import TitleBlock from '../components/Title';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../interfaces/AppContext';
 import { useContext } from 'react';
 import Link from 'next/link';
 // import { saveAs } from 'file-saver';

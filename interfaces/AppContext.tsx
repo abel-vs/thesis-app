@@ -1,7 +1,8 @@
 import { createContext } from 'react';
-import Dataset from '../interfaces/Dataset';
-import Action from '../interfaces/Action';
-import Results from '../interfaces/Results';
+import Dataset from './Dataset';
+import Action from './Action';
+import Results from './Results';
+import ModelDefinition from './ModelDefinition';
 
 const dispatchFunction = () => {
   return;
@@ -12,6 +13,8 @@ export interface AppState {
   setModelState: (value: File | null) => void;
   modelArchitectureFile: File | null;
   setModelArchitecture: (value: File | null) => void;
+  modelDefinition: ModelDefinition | null;
+  setModelDefinition: (value: ModelDefinition | null) => void;
   dataset: Dataset | null;
   setDataset: (value: Dataset | null) => void;
   compressionType: string;
@@ -37,6 +40,8 @@ export const AppContext = createContext<AppState>({
   setModelState: dispatchFunction,
   modelArchitectureFile: null,
   setModelArchitecture: dispatchFunction,
+  modelDefinition: null,
+  setModelDefinition: dispatchFunction,
   dataset: null,
   setDataset: dispatchFunction,
   compressionType: 'Model Size',

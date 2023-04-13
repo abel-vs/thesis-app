@@ -1,16 +1,18 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../interfaces/AppContext';
 import { useState } from 'react';
 import Head from 'next/head';
 import { CssVarsProvider } from '@mui/joy';
 import Dataset from '../interfaces/Dataset';
 import Action from '../interfaces/Action';
 import Results from '../interfaces/Results';
+import ModelDefinition from '../interfaces/ModelDefinition';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [modelStateFile, setModelState] = useState<File | null>(null);
   const [modelArchitectureFile, setModelArchitecture] = useState<File | null>(null);
+  const [modelDefinition, setModelDefinition] = useState<ModelDefinition | null>(null);
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [compressionType, setCompressionType] = useState<string>('Model Size');
   const [compressionTarget, setCompressionTarget] = useState<number>(50);
@@ -28,6 +30,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         setModelState,
         modelArchitectureFile,
         setModelArchitecture,
+        modelDefinition: modelDefinition,
+        setModelDefinition: setModelDefinition,
         dataset,
         setDataset,
         compressionType,

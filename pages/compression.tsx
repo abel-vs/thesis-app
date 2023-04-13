@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import Button from '../components/Button';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../interfaces/AppContext';
 import Code from '../components/Code';
 import TitleBlock from '../components/Title';
 import { BeakerIcon, CheckCircleIcon, ChipIcon, ScissorsIcon, QuestionMarkCircleIcon } from '@heroicons/react/solid';
-import { Alert, Card } from 'flowbite-react';
+import { Card } from 'flowbite-react';
 import { compressModel } from '../logic/api';
 import Action from '../interfaces/Action';
 import ErrorAlert from '../components/ErrorAlert';
@@ -122,25 +122,32 @@ const CompressionPage: NextPage = () => {
             loading={loading}
             disabled={selectedActions.length === 0}
             onClick={
-              context.modelStateFile !== null && context.modelArchitectureFile
+              context.modelStateFile && context.modelArchitectureFile
                 ? async () => {
                     setLoading(true);
-                    const res = await compressModel(context.modelStateFile!, context.modelArchitectureFile!, {
-                      actions: selectedActions,
-                      // actions: context.compressionActions.filter((action) => action.selected),
-                      dataset: context.dataset,
-                      performance_target: context.performanceTarget,
-                      compression_type: context.compressionType,
-                      compression_target: context.compressionTarget,
-                    });
-                    if (res === undefined) {
+                    const res =
+                      context.modelStateFile &&
+                      context.modelArchitectureFile &&
+                      context.modelDefinition &&
+                      context.dataset &&
+                      (await compressModel(
+                        context.modelStateFile,
+                        context.modelArchitectureFile,
+                        context.modelDefinition,
+                        {
+                          actions: selectedActions,
+                          dataset: context.dataset.name,
+                          performance_target: context.performanceTarget,
+                          compression_type: context.compressionType,
+                          compression_target: context.compressionTarget,
+                        }
+                      ));
+                    if (res === undefined || res === null) {
                       setLoading(false);
                       setErrorMessage('Something went wrong on the server. Please try again later. ');
                     } else if (!res.ok) {
                       setLoading(false);
                       setErrorMessage('Error: ' + res.statusText);
-                      console.log(res);
-                      console.log(await res.json());
                     } else {
                       const data = await res.json();
                       context.setOriginalResults(data.original_results);
