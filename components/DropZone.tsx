@@ -12,11 +12,14 @@ interface DropzoneProps {
 function Dropzone({ file, setFile, acceptedTypes }: DropzoneProps) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
-    setFile(acceptedFiles[0]);
-    const message = acceptedFiles.length > 0 ? null : rejectedFiles.length > 0 ? 'Wrong file type' : null;
-    setErrorMessage(message);
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
+      setFile(acceptedFiles[0]);
+      const message = acceptedFiles.length > 0 ? null : rejectedFiles.length > 0 ? 'Wrong file type' : null;
+      setErrorMessage(message);
+    },
+    [setFile]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

@@ -1,6 +1,5 @@
 import { LightningBoltIcon, ClockIcon, DatabaseIcon } from '@heroicons/react/solid';
 import { useState, useContext } from 'react';
-import { Slider } from '@mui/joy';
 import { AppContext } from '../interfaces/AppContext';
 import ButtonGroup from './ButtonGroup';
 
@@ -54,8 +53,8 @@ export default function Tabs() {
           defaultValue={selected.name}
           onChange={(e) => {
             setSelected(tabs.find((x) => x.name === e.target.value) ?? tabs[0]);
-            context.setCompressionType({name: selected.name, code: selected.code})}
-          }
+            context.setCompressionType({ name: selected.name, code: selected.code });
+          }}
         >
           {tabs.map((tab) => (
             <option key={tab.name}>{tab.name}</option>
@@ -68,7 +67,7 @@ export default function Tabs() {
         <ButtonGroup
           options={tabs}
           defaultSelected={tabs[0]}
-          onChange={(tab) => context.setCompressionType({name: tab.name, code: tab.code})}
+          onChange={(tab) => context.setCompressionType({ name: tab.name, code: tab.code })}
         />
       </div>
       {/* Content */}
