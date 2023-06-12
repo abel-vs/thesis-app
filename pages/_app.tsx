@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [modelArchitectureFile, setModelArchitecture] = useState<File | null>(null);
   const [modelDefinition, setModelDefinition] = useState<ModelDefinition | null>(null);
   const [dataset, setDataset] = useState<Dataset | null>(null);
-  const [compressionType, setCompressionType] = useState<CompressionObjective>({name: "Model Size", code: "size"});
+  const [compressionType, setCompressionType] = useState<CompressionObjective>({ name: 'Model Size', code: 'size' });
   const [compressionTarget, setCompressionTarget] = useState<number>(50);
   const [performanceTarget, setPerformanceTarget] = useState<number>(95);
   const [compressionActions, setCompressionActions] = useState<Action[]>([]);

@@ -45,7 +45,7 @@ export const AppContext = createContext<AppState>({
   setModelDefinition: dispatchFunction,
   dataset: null,
   setDataset: dispatchFunction,
-  compressionType: {name: "Model Size", code: "size"},
+  compressionType: { name: 'Model Size', code: 'size' },
   setCompressionType: dispatchFunction,
   compressionTarget: 1,
   setCompressionTarget: dispatchFunction,

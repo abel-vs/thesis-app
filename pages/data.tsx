@@ -58,7 +58,10 @@ const DataPage: NextPage = () => {
     metric: PERFORMANCE_METRICS.accuracy,
   });
 
-  const tabs: ButtonOption[] = [{ name: 'Existing Dataset' }, { name: 'Custom Dataset' }];
+  const tabs: ButtonOption[] = [
+    { name: 'Existing Dataset', code: 'existing' },
+    { name: 'Custom Dataset', code: 'custom' },
+  ];
   const [selected, setSelected] = useState<ButtonOption>(tabs[0]);
 
   return (

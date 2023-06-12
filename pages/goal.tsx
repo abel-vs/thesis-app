@@ -114,7 +114,7 @@ export default function Goal() {
         <Slider
           color="success"
           value={context.compressionTarget}
-          onChange={(e) => e.target && context.setCompressionTarget(e.target.value)}
+          onChange={(event, value) => context.setCompressionTarget(Array.isArray(value) ? value[0] : value)}
         />
       </Card>
 
@@ -135,8 +135,8 @@ export default function Goal() {
             <Slider
               color="success"
               value={context.performanceTarget}
-              max={results?.score.toFixed(2)}
-              onChange={(e) => e.target && context.setPerformanceTarget(e.target.value)}
+              max={results?.score}
+              onChange={(event, value) => context.setCompressionTarget(Array.isArray(value) ? value[0] : value)}
             />
           </>
         ) : (
