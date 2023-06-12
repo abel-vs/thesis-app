@@ -3,6 +3,7 @@ import Dataset from './Dataset';
 import Action from './Action';
 import Results from './Results';
 import ModelDefinition from './ModelDefinition';
+import CompressionObjective from './CompressionObjective';
 
 const dispatchFunction = () => {
   return;
@@ -17,8 +18,8 @@ export interface AppState {
   setModelDefinition: (value: ModelDefinition | null) => void;
   dataset: Dataset | null;
   setDataset: (value: Dataset | null) => void;
-  compressionType: string;
-  setCompressionType: (value: string) => void;
+  compressionType: CompressionObjective;
+  setCompressionType: (value: CompressionObjective) => void;
   compressionTarget: number;
   setCompressionTarget: (value: number) => void;
   performanceTarget: number;
@@ -44,7 +45,7 @@ export const AppContext = createContext<AppState>({
   setModelDefinition: dispatchFunction,
   dataset: null,
   setDataset: dispatchFunction,
-  compressionType: 'Model Size',
+  compressionType: {name: "Model Size", code: "size"},
   setCompressionType: dispatchFunction,
   compressionTarget: 1,
   setCompressionTarget: dispatchFunction,

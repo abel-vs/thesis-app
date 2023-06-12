@@ -138,7 +138,7 @@ const CompressionPage: NextPage = () => {
                           actions: selectedActions,
                           dataset: context.dataset.name,
                           performance_target: context.performanceTarget,
-                          compression_type: context.compressionType,
+                          compression_type: context.compressionType.code,
                           compression_target: context.compressionTarget,
                         }
                       ));

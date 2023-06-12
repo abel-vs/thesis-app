@@ -31,7 +31,7 @@ const ResultsPage: NextPage = () => {
       <Card className="w-full mt-10 mb-5 text-left">
         <h2 className="text-2xl font-bold">Configuration</h2>
         <div>
-          Compression goal was to reduce <b>{context.compressionType.toLowerCase()}</b> by{' '}
+          Compression goal was to reduce <b>{context.compressionType.name.toLowerCase()}</b> by{' '}
           <b>{context.compressionTarget}%</b>.
         </div>
         <div>

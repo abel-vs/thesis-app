@@ -53,7 +53,7 @@ export default function Goal() {
                 <TableTitle text="Model size" />
                 <Table.Cell>{results.model_size.toFixed(2)} MB</Table.Cell>
                 <Table.Cell>
-                  {context.compressionType === 'Model Size'
+                  {context.compressionType.code === 'size'
                     ? (results.model_size * (1 - context.compressionTarget / 100)).toFixed(2) + ' MB'
                     : '-'}
                 </Table.Cell>
@@ -62,7 +62,7 @@ export default function Goal() {
                 <TableTitle text="Number of parameters" />
                 <Table.Cell>{nf.format(results.params)}</Table.Cell>
                 <Table.Cell>
-                  {context.compressionType === 'Model Size'
+                  {context.compressionType.code === 'size'
                     ? nf.format(results.params * (1 - context.compressionTarget / 100))
                     : '-'}
                 </Table.Cell>
@@ -72,7 +72,7 @@ export default function Goal() {
                 <TableTitle text="Number of MACs" />
                 <Table.Cell>{nf.format(results.macs)}</Table.Cell>
                 <Table.Cell>
-                  {context.compressionType === 'Energy Usage'
+                  {context.compressionType.code === 'flops'
                     ? nf.format(results.macs * (1 - context.compressionTarget / 100))
                     : '-'}
                 </Table.Cell>
@@ -82,7 +82,7 @@ export default function Goal() {
                 <TableTitle text="Inference time (per batch)" />
                 <Table.Cell>{results.batch_duration.toFixed(2)} ms</Table.Cell>
                 <Table.Cell>
-                  {context.compressionType === 'Inference Time'
+                  {context.compressionType.code === 'time'
                     ? (results.batch_duration * (1 - context.compressionTarget / 100)).toFixed(2) + ' ms'
                     : '-'}
                 </Table.Cell>
@@ -92,7 +92,7 @@ export default function Goal() {
                 <TableTitle text="Inference time (per data point)" />
                 <Table.Cell>{results.data_duration.toFixed(4)} ms</Table.Cell>
                 <Table.Cell>
-                  {context.compressionType === 'Inference Time'
+                  {context.compressionType.code === 'time'
                     ? (results.data_duration * (1 - context.compressionTarget / 100)).toFixed(2) + ' ms'
                     : '-'}
                 </Table.Cell>
@@ -109,7 +109,7 @@ export default function Goal() {
         <p className="my-4">Select the compression goal you want to achieve.</p>
         <Tabs />
         <label className="block mt-4 font-bold text-gray-900 dark:text-white">
-          Target {context.compressionType.toLowerCase()} reduction: {context.compressionTarget}%
+          Target {context.compressionType.name.toLowerCase()} reduction: {context.compressionTarget}%
         </label>
         <Slider
           color="success"
@@ -162,10 +162,11 @@ export default function Goal() {
               context.modelDefinition &&
               context.dataset &&
               (await analyzeModel(context.modelStateFile, context.modelArchitectureFile, context.modelDefinition, {
-                compression_goal: context.compressionType,
+                compression_goal: context.compressionType.code,
                 compression_target: context.compressionTarget,
                 performance_metric: context.dataset.metric.name,
                 performance_target: context.performanceTarget,
+                dataset: context.dataset.name,
               }));
             if (compression_actions === undefined) {
               setLoading(false);

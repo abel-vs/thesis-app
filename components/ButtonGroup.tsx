@@ -13,6 +13,7 @@ interface ButtonGroupProps {
 
 export interface ButtonOption {
   name: string;
+  code: string;
   icon?: JSX.Element;
   object?: object;
 }

@@ -8,13 +8,14 @@ import Dataset from '../interfaces/Dataset';
 import Action from '../interfaces/Action';
 import Results from '../interfaces/Results';
 import ModelDefinition from '../interfaces/ModelDefinition';
+import CompressionObjective from '../interfaces/CompressionObjective';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [modelStateFile, setModelState] = useState<File | null>(null);
   const [modelArchitectureFile, setModelArchitecture] = useState<File | null>(null);
   const [modelDefinition, setModelDefinition] = useState<ModelDefinition | null>(null);
   const [dataset, setDataset] = useState<Dataset | null>(null);
-  const [compressionType, setCompressionType] = useState<string>('Model Size');
+  const [compressionType, setCompressionType] = useState<CompressionObjective>({name: "Model Size", code: "size"});
   const [compressionTarget, setCompressionTarget] = useState<number>(50);
   const [performanceTarget, setPerformanceTarget] = useState<number>(95);
   const [compressionActions, setCompressionActions] = useState<Action[]>([]);

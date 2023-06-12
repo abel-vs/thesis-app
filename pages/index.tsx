@@ -9,7 +9,7 @@ const Home: NextPage = () => {
     <>
       <div className="flex flex-col items-center justify-center">
         <h1 className="text-6xl font-bold">
-          Tool <GradientText text="X" />
+          Easy<GradientText text="Compress" />
         </h1>
         <p className="mt-3 text-2xl">Automated model compression for deep learning.</p>
         <Link href="/model" className="w-80 m-8">
