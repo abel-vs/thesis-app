@@ -121,8 +121,8 @@ export default function Goal() {
       <Card className=" w-full text-left">
         <h3 className="text-2xl font-bold">Performance Threshold</h3>
         <p className="my-4">
-          Choose the maximal performance decrease. The model won't be further compressed if this would decrease the
-          performance below this threshold.
+          Choose the maximal performance decrease. The model won`&apos;`t be further compressed if this would decrease
+          the performance below this threshold.
         </p>
         {context.dataset ? (
           <>

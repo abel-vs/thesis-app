@@ -6,7 +6,7 @@ import Button from '../components/Button';
 import { AppContext } from '../interfaces/AppContext';
 import Code from '../components/Code';
 import TitleBlock from '../components/Title';
-import { Card, Checkbox, Label, Radio, Select } from 'flowbite-react';
+import { Card, Select } from 'flowbite-react';
 import InfoLink from '../components/InfoLink';
 import { getModulesMethods } from '../logic/api';
 import ErrorAlert from '../components/ErrorAlert';
@@ -22,8 +22,9 @@ const ModelPage: NextPage = () => {
     {
       name: 'Module',
       icon: <CogIcon />,
+      code: 'module',
     },
-    { name: 'Method', icon: <CodeIcon /> },
+    { name: 'Method', icon: <CodeIcon />, code: 'method' },
   ];
   const [modelType, setModelType] = useState<ButtonOption>(modelTypeOptions[0]);
 
